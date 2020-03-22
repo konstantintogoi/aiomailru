@@ -1,40 +1,32 @@
-from os.path import dirname, join
-from setuptools import setup
-
-
-readme_path = join(dirname(__file__), 'README.md')
-
-with open(readme_path) as readme_file:
-    readme = readme_file.read()
+from setuptools import find_packages, setup
 
 
 setup(
     name='aiomailru',
-    version='0.0.24',
+    version='0.1.0rc1',
     author='Konstantin Togoi',
     author_email='konstantin.togoi@gmail.com',
     url='https://github.com/KonstantinTogoi/aiomailru',
     description='Platform@Mail.ru Python REST API wrapper',
-    long_description=readme,
-    long_description_content_type='text/markdown',
+    long_description=open('README.rst').read(),
     license='BSD',
-    packages=['aiomailru', 'aiomailru.logging', 'aiomailru.objects'],
-    package_data={'aiomailru.logging': ['config.yaml']},
-    include_package_data=True,
+    packages=find_packages(),
+    python_requires='>=3.5',
     install_requires='aiohttp>=3.0.0',
-    tests_require=['pytest', 'pytest-asyncio', 'pytest-localserver'],
-    extras_require={
-        'logging': ['PyYAML'],
-        'scrapers': ['pyppeteer<=0.0.25'],
-    },
-    keywords=['mail.ru api asyncio'],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest-asyncio', 'pytest-dotenv', 'pytest-localserver'],
+    extras_require={'scrapers': ['pyppeteer<=0.0.25']},
+    keywords=['mail.ru rest api scrapers asyncio'],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules',

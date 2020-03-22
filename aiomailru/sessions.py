@@ -13,6 +13,7 @@ from .exceptions import (
     InvalidUserError,
     ClientNotAvailableError,
     APIError,
+    EmptyResponseError,
 )
 from .parsers import AuthPageParser, AccessPageParser
 from .utils import full_scope, parseaddr, SignatureCircuit, Cookie
@@ -64,31 +65,34 @@ class PublicSession(Session):
 
         """
 
-        url = f'{self.PUBLIC_URL}/{"/".join(segments)}'
+        url = self.PUBLIC_URL + '/' + '/'.join(segments)
 
         try:
             async with self.session.get(url, params=params) as resp:
                 content = await resp.json(content_type=self.CONTENT_TYPE)
         except aiohttp.ContentTypeError:
-            msg = f'got non-REST path: {url}'
+            msg = 'got non-REST path: %s' % url
             log.error(msg)
             raise Error(msg)
 
         if self.pass_error:
             response = content
         elif 'error' in content:
-            log.error(content['error'])
-            raise APIError(content['error'])
-        else:
+            log.error(content)
+            raise APIError(content)
+        elif content:
             response = content
+        else:
+            log.error('got empty response: %s' % url)
+            raise EmptyResponseError()
 
         return response
 
 
 class TokenSession(PublicSession):
-    """Session for sending authorized requests."""
+    """Session for executing authorized requests."""
 
-    API_URL = f'{PublicSession.PUBLIC_URL}/api'
+    API_URL = PublicSession.PUBLIC_URL + '/api'
     ERROR_MSG = 'See https://api.mail.ru/docs/guides/restapi/#sig.'
 
     __slots__ = ('app_id', 'private_key', 'secret_key', 'session_key', 'uid')
@@ -136,12 +140,12 @@ class TokenSession(PublicSession):
         return params
 
     def params_to_str(self, params):
-        query = ''.join(f'{k}={str(params[k])}' for k in sorted(params))
+        query = ''.join(k + '=' + str(params[k]) for k in sorted(params))
 
         if self.sig_circuit is SignatureCircuit.CLIENT_SERVER:
-            return f'{self.uid}{query}{self.private_key}'
+            return str(self.uid) + query + self.private_key
         elif self.sig_circuit is SignatureCircuit.SERVER_SERVER:
-            return f'{query}{self.secret_key}'
+            return query + self.secret_key
         else:
             raise Error(self.ERROR_MSG)
 
@@ -177,7 +181,7 @@ class TokenSession(PublicSession):
 
         """
 
-        url = f'{self.API_URL}/{"/".join(segments)}'
+        url = self.API_URL + '/' + '/'.join(segments)
 
         params = {k: params[k] for k in params if params[k]}
         params.update(self.required_params)
@@ -189,15 +193,19 @@ class TokenSession(PublicSession):
         if self.pass_error:
             response = content
         elif 'error' in content:
-            log.error(content['error'])
-            raise APIError(content['error'])
-        else:
+            log.error(content)
+            raise APIError(content)
+        elif content:
             response = content
+        else:
+            log.error('got empty response: %s' % url)
+            raise EmptyResponseError()
 
         return response
 
 
 class ClientSession(TokenSession):
+    """Session for executing requests in client applications."""
 
     ERROR_MSG = 'Pass "uid" and "private_key" to use client-server circuit.'
 
@@ -208,6 +216,7 @@ class ClientSession(TokenSession):
 
 
 class ServerSession(TokenSession):
+    """Session for executing requests in server applications."""
 
     ERROR_MSG = 'Pass "secret_key" to use server-server circuit.'
 
@@ -217,7 +226,101 @@ class ServerSession(TokenSession):
                          pass_error, session)
 
 
+class CodeSession(TokenSession):
+    """Session with authorization with OAuth 2.0 (Authorization Code Grant).
+
+    The Authorization Code grant is used by confidential and public
+    clients to exchange an authorization code for an access token.
+
+    .. _OAuth 2.0 Authorization Code Grant
+        https://oauth.net/2/grant-types/authorization-code/
+
+    .. _Авторизация для сайтов
+        https://api.mail.ru/docs/guides/oauth/sites/
+
+    .. _Авторизация для мобильных сайтов
+        https://api.mail.ru/docs/guides/oauth/mobile-web/
+
+    """
+
+    OAUTH_URL = 'https://connect.mail.ru/oauth/token'
+    GET_ACCESS_TOKEN_ERROR_MSG = 'Failed to receive access token.'
+
+    __slots__ = ('code', 'redirect_uri', 'refresh_token', 'expires_in')
+
+    def __init__(self, app_id, private_key, secret_key, code, redirect_uri,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, private_key, secret_key, '', '', (),
+                         pass_error, session, **kwargs)
+        self.code = code
+        self.redirect_uri = redirect_uri
+
+    @property
+    def params(self):
+        """Authorization request's parameters."""
+        return {
+            'client_id': self.app_id,
+            'client_secret': self.secret_key,
+            'grant_type': 'authorization_code',
+            'code': self.code,
+            'redirect_uri': self.redirect_uri,
+        }
+
+    async def authorize(self):
+        """Authorize with OAuth 2.0 (Authorization Code)."""
+
+        async with self.session.post(self.OAUTH_URL, data=self.params) as resp:
+            content = await resp.json(content_type=self.CONTENT_TYPE)
+
+        if 'error' in content:
+            log.error(content)
+            raise OAuthError(content)
+        elif content:
+            try:
+                self.refresh_token = content['refresh_token']
+                self.expires_in = content['expires_in']
+                self.session_key = content['access_token']
+                self.uid = content['x_mailru_vid']
+            except KeyError as e:
+                raise OAuthError(str(e.args[0]) + ' is missing in the response')
+        else:
+            raise OAuthError('got empty authorization response')
+
+        return self
+
+
+class CodeClientSession(CodeSession):
+    """`CodeSession` without `secret_key` argument."""
+
+    def __init__(self, app_id, private_key, code, redirect_uri,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, private_key, '', code, redirect_uri,
+                         pass_error, session, **kwargs)
+
+
+class CodeServerSession(CodeSession):
+    """`CodeSession` without `private_key` argument."""
+
+    def __init__(self, app_id, secret_key, code, redirect_uri,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, '', secret_key, code, redirect_uri,
+                         pass_error, session, **kwargs)
+
+
 class ImplicitSession(TokenSession):
+    """Session with authorization with OAuth 2.0 (Implicit Grant).
+
+    The Implicit flow was a simplified OAuth flow previously recommended
+    for native apps and JavaScript apps where the access token was returned
+    immediately without an extra authorization code exchange step.
+
+    .. _OAuth 2.0 Implicit Grant
+        https://oauth.net/2/grant-types/implicit/
+
+    .. _Авторизация для Standalone-приложений
+        https://api.mail.ru/docs/guides/oauth/standalone/
+
+    """
 
     OAUTH_URL = 'https://connect.mail.ru/oauth/authorize'
     REDIRECT_URI = 'http%3A%2F%2Fconnect.mail.ru%2Foauth%2Fsuccess.html'
@@ -231,19 +334,19 @@ class ImplicitSession(TokenSession):
     POST_ACCESS_DIALOG_ERROR_MSG = 'Failed to process access dialog.'
 
     __slots__ = ('email', 'passwd', 'scope',
-                 'expires_in', 'refresh_token', 'token_type')
+                 'refresh_token', 'expires_in', 'token_type')
 
     def __init__(self, app_id, private_key, secret_key, email, passwd, scope,
                  pass_error=False, session=None, **kwargs):
         super().__init__(app_id, private_key, secret_key, '', '', (),
-                         pass_error, session)
+                         pass_error, session, **kwargs)
         self.email = email
         self.passwd = passwd
         self.scope = scope or full_scope()
 
     @property
     def params(self):
-        """Authorization parameters."""
+        """Authorization request's parameters."""
         return {
             'client_id': self.app_id,
             'redirect_uri': self.REDIRECT_URI,
@@ -252,27 +355,27 @@ class ImplicitSession(TokenSession):
         }
 
     async def authorize(self, num_attempts=None, retry_interval=None):
-        """OAuth Implicit flow."""
+        """Authorize with OAuth 2.0 (Implicit flow)."""
 
         num_attempts = num_attempts or self.AUTHORIZE_NUM_ATTEMPTS
         retry_interval = retry_interval or self.AUTHORIZE_RETRY_INTERVAL
 
         for attempt_num in range(num_attempts):
-            log.debug(f'getting authorization dialog {self.OAUTH_URL}')
+            log.debug('getting authorization dialog %s' % self.OAUTH_URL)
             url, html = await self._get_auth_dialog()
 
             if 'Не указано приложение' in html:
                 raise InvalidClientError()
             elif url.path == '/oauth/authorize':
-                log.debug(f'authorizing at {url}')
+                log.debug('authorizing at %s' % url)
                 url, html = await self._post_auth_dialog(html)
 
             if url.path == '/oauth/authorize':
                 if 'fail' in url.query:
-                    log.error(f'Invalid e-mail {self.email} or password.')
+                    log.error('Invalid e-mail %s or password.' % self.email)
                     raise InvalidGrantError()
                 elif 'Необходим доступ к вашим данным' in html:
-                    log.debug(f'giving rights at {url}')
+                    log.debug('giving rights at %s' % url)
                     url, html = await self._post_access_dialog(html)
 
             if 'Авторизация запрещена' in html:
@@ -284,13 +387,13 @@ class ImplicitSession(TokenSession):
                 log.debug('authorized successfully')
                 return self
             elif url.path == '/recovery':
-                log.error(f'User {self.email} is blocked.')
+                log.error('User %s is blocked.' % self.email)
                 raise InvalidUserError()
 
             await asyncio.sleep(retry_interval)
         else:
-            log.error(f'{num_attempts} login attempts exceeded.')
-            raise OAuthError(f'{num_attempts} login attempts exceeded.')
+            log.error('%d login attempts exceeded.' % num_attempts)
+            raise OAuthError('%d login attempts exceeded.' % num_attempts)
 
     async def _get_auth_dialog(self):
         """Returns url and html code of authorization dialog."""
@@ -324,7 +427,7 @@ class ImplicitSession(TokenSession):
 
         domain, login = parseaddr(self.email)
         form_data['Login'] = login
-        form_data['Domain'] = f'{domain}.ru'
+        form_data['Domain'] = domain + '.ru'
         form_data['Password'] = self.passwd
 
         async with self.session.post(form_url, data=form_data) as resp:
@@ -370,27 +473,185 @@ class ImplicitSession(TokenSession):
                 raise OAuthError(self.GET_ACCESS_TOKEN_ERROR_MSG)
             else:
                 location = URL(resp.history[-1].headers['Location'])
-                url = URL(f'?{location.fragment}')
+                url = URL('?' + location.fragment)
 
         try:
             self.session_key = url.query['access_token']
-            self.expires_in = url.query['expires_in']
+            self.expires_in = url.query.get('expires_in')
             self.refresh_token = url.query['refresh_token']
-            self.token_type = url.query['token_type']
-            self.uid = url.query['x_mailru_vid']
+            self.token_type = url.query.get('token_type')
+            self.uid = url.query.get('x_mailru_vid')
         except KeyError as e:
-            raise OAuthError(f'"{e.args[0]}" is missing in the auth response')
+            raise OAuthError(str(e.args[0]) + ' is missing in the response')
 
 
 class ImplicitClientSession(ImplicitSession):
+    """`ImplicitSession` without `secret_key` argument."""
+
     def __init__(self, app_id, private_key, email, passwd, scope,
                  pass_error=False, session=None, **kwargs):
         super().__init__(app_id, private_key, '', email, passwd, scope,
-                         pass_error, session)
+                         pass_error, session, **kwargs)
 
 
 class ImplicitServerSession(ImplicitSession):
+    """`ImplicitSession` without `private_key` argument."""
+
     def __init__(self, app_id, secret_key, email, passwd, scope,
                  pass_error=False, session=None, **kwargs):
         super().__init__(app_id, '', secret_key, email, passwd, scope,
-                         pass_error, session)
+                         pass_error, session, **kwargs)
+
+
+class PasswordSession(TokenSession):
+    """Session with authorization with OAuth 2.0 (Password Grant).
+
+    The Password grant type is a way to exchange a user's credentials
+    for an access token.
+
+    .. _OAuth 2.0 Password Grant
+        https://oauth.net/2/grant-types/password/
+
+    .. _Авторизация по логину и паролю
+        https://api.mail.ru/docs/guides/oauth/client-credentials/
+
+    """
+
+    OAUTH_URL = 'https://appsmail.ru/oauth/token'
+
+    __slots__ = ('email', 'passwd', 'scope', 'refresh_token', 'expires_in')
+
+    def __init__(self, app_id, private_key, secret_key, email, passwd, scope,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, private_key, secret_key, '', '', (),
+                         pass_error, session, **kwargs)
+        self.email = email
+        self.passwd = passwd
+        self.scope = scope or full_scope()
+
+    @property
+    def params(self):
+        """Authorization request's parameters."""
+        return {
+            'grant_type': 'password',
+            'client_id': self.app_id,
+            'client_secret': self.secret_key,
+            'username': self.email,
+            'password': self.passwd,
+            'scope': self.scope,
+        }
+
+    async def authorize(self):
+        """Authorize with OAuth 2.0 (Password Grant)."""
+
+        async with self.session.post(self.OAUTH_URL, data=self.params) as resp:
+            content = await resp.json(content_type=self.CONTENT_TYPE)
+
+        if 'error' in content:
+            log.error(content)
+            raise OAuthError(content)
+        elif content:
+            try:
+                self.refresh_token = content['refresh_token']
+                self.expires_in = content.get('expires_in')
+                self.session_key = content['access_token']
+                self.uid = content.get('x_mailru_vid')
+            except KeyError as e:
+                raise OAuthError(str(e.args[0]) + ' is missing in the response')
+        else:
+            raise OAuthError('got empty authorization response')
+
+        return self
+
+
+class PasswordClientSession(PasswordSession):
+    """`PasswordSession` without `secret_key` argument."""
+
+    def __init__(self, app_id, private_key, email, passwd, scope,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, private_key, '', email, passwd, scope,
+                         pass_error, session, **kwargs)
+
+
+class PasswordServerSession(PasswordSession):
+    """`PasswordSession` without `private_key` argument."""
+
+    def __init__(self, app_id, secret_key, email, passwd, scope,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, '', secret_key, email, passwd, scope,
+                         pass_error, session, **kwargs)
+
+
+class RefreshSession(TokenSession):
+    """Session with authorization with OAuth 2.0 (Refresh Token).
+
+    The Refresh Token grant type is used by clients to exchange
+    a refresh token for an access token when the access token has expired.
+
+    .. _OAuth 2.0 Refresh Token
+        https://oauth.net/2/grant-types/refresh-token/
+
+    .. _Использование refresh_token
+        https://api.mail.ru/docs/guides/oauth/client-credentials/#refresh_token
+
+    """
+
+    OAUTH_URL = 'https://appsmail.ru/oauth/token'
+
+    __slots__ = ('refresh_token', 'expires_in')
+
+    def __init__(self, app_id, private_key, secret_key, refresh_token,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, private_key, secret_key, '', '', (),
+                         pass_error, session, **kwargs)
+        self.refresh_token = refresh_token
+
+    @property
+    def params(self):
+        """Authorization request's parameters."""
+        return {
+            'grant_type': 'refresh_token',
+            'client_id': self.app_id,
+            'refresh_token': self.refresh_token,
+            'client_secret': self.secret_key,
+        }
+
+    async def authorize(self):
+        """Authorize with OAuth 2.0 (Refresh Token)."""
+
+        async with self.session.post(self.OAUTH_URL, data=self.params) as resp:
+            content = await resp.json(content_type=self.CONTENT_TYPE)
+
+        if 'error' in content:
+            log.error(content)
+            raise OAuthError(content)
+        elif content:
+            try:
+                self.refresh_token = content['refresh_token']
+                self.expires_in = content.get('expires_in')
+                self.session_key = content['access_token']
+                self.uid = content.get('x_mailru_vid')
+            except KeyError as e:
+                raise OAuthError(str(e.args[0]) + ' is missing in the response')
+        else:
+            raise OAuthError('got empty authorization response')
+
+        return self
+
+
+class RefreshClientSession(RefreshSession):
+    """`RefreshSession` without `secret_key` argument."""
+
+    def __init__(self, app_id, private_key, refresh_token,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, private_key, '', refresh_token,
+                         pass_error, session, **kwargs)
+
+
+class RefreshServerSession(RefreshSession):
+    """`RefreshSession` without `private_key` argument."""
+
+    def __init__(self, app_id, secret_key, refresh_token,
+                 pass_error=False, session=None, **kwargs):
+        super().__init__(app_id, '', secret_key, refresh_token,
+                         pass_error, session, **kwargs)

@@ -1,92 +1,97 @@
+import atexit
 import os
 
 import pytest
 
-skip_scrapers, reason = False, ''
+from aiomailru.sessions import ImplicitSession, TokenSession
+
+
+EMAIL = os.environ.get('MAILRU_EMAIL')
+PASSWD = os.environ.get('MAILRU_PASSWD')
+CLIENT_ID = os.environ.get('MAILRU_CLIENT_ID')
+PRIVATE_KEY = os.environ.get('MAILRU_PRIVATE_KEY')
+SECRET_KEY = os.environ.get('MAILRU_SECRET_KEY')
+SCOPE = os.environ.get('MAILRU_SCOPE')
+
+BROWSER_ENDPOINT = os.environ.get('PYPPETEER_BROWSER_ENDPOINT')
+
+skip_scrapers = False
 try:
     from aiomailru.scrapers import APIScraper
-    from manager import login
 except ModuleNotFoundError:
-    skip_scrapers, reason = True, 'pyppeteer not found'
-
-
-test_acc_name = os.environ.get('AIOMAILRU_TEST_ACC_NAME')
-test_app_name = os.environ.get('AIOMAILRU_TEST_APP_NAME')
-
-if not test_acc_name:
-    skip_scrapers, reason = True, 'account name not found'
+    reasons = ['pyppeteer not found']
 else:
-    print('got test account name:', test_acc_name)
-if not test_app_name:
-    skip_scrapers, reason = True, 'application name not found'
-else:
-    print('got test application id:', test_app_name)
+    reasons = []
+    if EMAIL is None:
+        reasons.append('MAILRU_EMAIL (user e-mail) not set')
+    if PASSWD is None:
+        reasons.append('MAILRU_PASSWD (password) not set')
+    if CLIENT_ID is None:
+        reasons.append('MAILRU_CLIENT_ID (app id) not set')
+    if PRIVATE_KEY is None:
+        reasons.append('MAILRU_PRIVATE_KEY not set')
+    if SECRET_KEY is None:
+        reasons.append('MAILRU_SECRET_KEY not set')
+    if SCOPE is None:
+        reasons.append('MAILRU_SCOPE (permissions) not set')
+    if BROWSER_ENDPOINT is None:
+        reasons.append('PYPPETEER_BROWSER_ENDPOINT (Chrome endpoint) not set')
 
 
-@pytest.mark.skipif(skip_scrapers, reason=reason)
+if reasons:
+    skip_scrapers = True
+    atexit.register(lambda: print('\n'.join(reasons)))
+    atexit.register(lambda: print('Scrapers tests were skipped'))
+
+
+GROUP_ID = os.environ.get(
+    'MAILRU_GROUP_ID',
+    '5396991818946538245'  # My@Mail.Ru official community
+)
+
+
+@pytest.mark.skipif(skip_scrapers, reason=';'.join(reasons))
 class TestScrapers:
 
-    dummy_params = ()
-    params_groups_get = dummy_params
-    params_groups_get_info = dummy_params
-    params_groups_join = dummy_params
-    params_stream_get_by_author = dummy_params
+    @pytest.fixture
+    def app(self):
+        return CLIENT_ID, PRIVATE_KEY, SECRET_KEY
 
-    @staticmethod
-    def dummy_check(response):
-        assert True
+    @pytest.fixture
+    def cred(self):
+        return EMAIL, PASSWD, SCOPE
 
-    check_groups_get = dummy_check
-    check_groups_get_info = dummy_check
-    check_groups_join = dummy_check
-    check_stream_get_by_author = dummy_check
+    @pytest.fixture
+    async def session(self, app, cred):
+        async with ImplicitSession(*app, *cred) as session:
+            token = session.session_key
+            cookies = session.cookies
+        return TokenSession(*app, token, 0, cookies=cookies)
 
-    async def test_groups_get(self, acc_name, app_name):
-        print('test "groups.get"')
-        session = await login(acc_name, acc_name, app_name)
-        api = APIScraper(session)
-        resp = await api.groups.get(
-            **dict(self.params_groups_get), scrape=True
-        )
-        self.check_groups_get(resp)
-        await session.close()
-        print('"groups.get" tested successfully')
+    @pytest.mark.asyncio
+    async def test_groups_get(self, session: TokenSession):
+        async with session:
+            api = APIScraper(session)
+            _ = await api.groups.get(scrape=True)
+            await api.browser.disconnect()
 
-    async def test_groups_get_info(self, acc_name, app_name):
-        print('test "groups.getInfo"')
-        session = await login(acc_name, acc_name, app_name)
-        app = APIScraper(session)
-        resp = await app.groups.getInfo(
-            **dict(self.params_groups_get_info), scrape=True
-        )
-        TestScrapers.check_groups_get_info(resp)
-        await session.close()
-        print('"groups.getInfo" tested successfully')
+    @pytest.mark.asyncio
+    async def test_groups_get_info(self, session: TokenSession):
+        async with session:
+            api = APIScraper(session)
+            _ = await api.groups.getInfo(uids=GROUP_ID, scrape=True)
+            await api.browser.disconnect()
 
-    async def test_groups_join(self, acc_name, app_name):
-        print('test "groups.join"')
-        session = await login(acc_name, acc_name, app_name)
-        api = APIScraper(session)
-        resp = await api.groups.join(
-            **dict(self.params_groups_join), scrape=True
-        )
-        self.check_groups_join(resp)
-        await session.close()
-        print('"groups.join" tested successfully')
+    @pytest.mark.asyncio
+    async def test_groups_join(self, session: TokenSession):
+        async with session:
+            api = APIScraper(session)
+            _ = await api.groups.join(group_id=GROUP_ID, scrape=True)
+            await api.browser.disconnect()
 
-    async def test_stream_get_by_author(self, acc_name, app_name):
-        print('test "stream.getByAuthor"')
-        session = await login(acc_name, acc_name, app_name)
-        api = APIScraper(session)
-        resp = await api.stream.getByAuthor(
-            **dict(self.params_stream_get_by_author), scrape=True
-        )
-        self.check_stream_get_by_author(resp)
-        await session.close()
-        print('"stream.getByAuthor" tested successfully')
-
-    async def test(self, acc_name=test_acc_name, app_name=test_app_name):
-        await self.test_groups_get(acc_name, app_name)
-        await self.test_groups_get_info(acc_name, app_name)
-        await self.test_groups_join(acc_name, app_name)
-        await self.test_stream_get_by_author(acc_name, app_name)
+    @pytest.mark.asyncio
+    async def test_stream_get_by_author(self, session: TokenSession):
+        async with session:
+            api = APIScraper(session)
+            _ = await api.stream.getByAuthor(uid=GROUP_ID, scrape=True)
+            await api.browser.disconnect()

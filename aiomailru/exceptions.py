@@ -1,4 +1,9 @@
+"""Exceptions."""
+
+
 class Error(Exception):
+
+    ERROR = 'internal_error'
 
     @property
     def error(self):
@@ -6,7 +11,7 @@ class Error(Exception):
 
     def __init__(self, error: str or dict):
         arg = error if isinstance(error, dict) else {
-            'error': 'internal_error',
+            'error': self.ERROR,
             'error_description': error,
         }
         super().__init__(arg)
@@ -15,11 +20,10 @@ class Error(Exception):
 class OAuthError(Error):
     """OAuth error."""
 
-    def __init__(self, error: str):
-        super().__init__({'error': 'oauth_error', 'error_description': error})
+    ERROR = 'oauth_error'
 
 
-class CustomOAuthError(Error):
+class CustomOAuthError(OAuthError):
     """Custom errors that raised when authorization failed."""
 
     ERROR = {'error': '', 'error_description': ''}
@@ -67,11 +71,11 @@ class ClientNotAvailableError(CustomOAuthError):
 class APIError(Error):
     def __init__(self, error):
         super().__init__(error)
-        self.code = error['error_code']
-        self.msg = error['error_msg']
+        self.code = error['error']['error_code']
+        self.msg = error['error']['error_msg']
 
     def __str__(self):
-        return f'Error {self.code}: {self.msg}'
+        return 'Error {code}: {msg}'.format(code=self.code, msg=self.msg)
 
 
 class APIScrapperError(Error):
@@ -82,14 +86,20 @@ class APIScrapperError(Error):
         self.msg = msg
 
     def __str__(self):
-        return f'Error {self.code}: {self.msg}'
+        return 'Error {code}: {msg}'.format(code=self.code, msg=self.msg)
 
 
-class CustomAPIError(Error):
+class CustomAPIError(APIError):
+    """Custom API error."""
+
     ERROR = {'error': {'error_code': 0, 'error_msg': ''}}
 
     def __init__(self):
         super().__init__(self.ERROR)
+
+
+class EmptyResponseError(CustomAPIError):
+    ERROR = {'error': {'error_code': -1, 'error_msg': 'empty response'}}
 
 
 class EmptyObjectsError(CustomAPIError):
