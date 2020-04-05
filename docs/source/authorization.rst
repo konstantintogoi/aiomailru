@@ -1,14 +1,18 @@
 Authorization
 =============
 
-To authorize with Platform@Mail.Ru OAuth 2.0 you need :code:`app_id`.
+To authorize with Mail.Ru OAuth 2.0 you need :code:`app_id`.
 And you need either :code:`private_key` or :code:`secret_key`
 for executing API requests after authorization.
 
-After authorization you will receive:
+The preferred way to authorize is an :code:`async with` statement.
+After authorization the session will have the following attributes:
 
-* :code:`session_key` (aka :code:`access_token`)
+* :code:`session_key` aka :code:`access_token`
 * :code:`uid` that is necessary only when :code:`secret_key` not passed
+* :code:`refresh_token`
+* :code:`expires_in`
+* :code:`token_type` if Implicit Grant used
 
 Authorization Code Grant
 ------------------------
@@ -17,6 +21,7 @@ Authorization Code Grant
 
     from aiomailru import CodeSession, API
 
+    app_id = 123456
     private_key = 'abcde'
     secret_key = ''
 
@@ -36,6 +41,7 @@ Implicit Grant
 
     from aiomailru import ImplicitSession, API
 
+    app_id = 123456
     private_key = ''
     secret_key = 'xyz'
 
@@ -54,6 +60,7 @@ Password Grant
 
     from aiomailru import PasswordSession, API
 
+    app_id = 123456
     private_key = 'abcde'
     secret_key = 'xyz'
 
@@ -72,6 +79,7 @@ Refresh Token
 
     from aiomailru import RefreshSession, API
 
+    app_id = 123456
     private_key = ''
     secret_key = ''
 
