@@ -1,25 +1,34 @@
-import asyncio
+"""Sessions."""
 import hashlib
 import logging
+from enum import Enum
 
 import aiohttp
-from yarl import URL
 
 from .exceptions import (
     Error,
     OAuthError,
-    InvalidGrantError,
-    InvalidClientError,
-    InvalidUserError,
-    ClientNotAvailableError,
     APIError,
-    EmptyResponseError,
 )
-from .parsers import AuthPageParser, AccessPageParser
-from .utils import full_scope, parseaddr, SignatureCircuit, Cookie
-
 
 log = logging.getLogger(__name__)
+
+
+def full_scope():
+    return ' '.join(['photos', 'guestbook', 'stream', 'messages', 'events'])
+
+
+class SignatureCircuit(Enum):
+    """Signature circuit.
+
+    .. _Подпись запроса
+        https://api.mail.ru/docs/guides/restapi/#sig
+
+    """
+
+    UNDEFINED = 0
+    CLIENT_SERVER = 1
+    SERVER_SERVER = 2
 
 
 class Session:
@@ -80,11 +89,8 @@ class PublicSession(Session):
         elif 'error' in content:
             log.error(content)
             raise APIError(content)
-        elif content:
-            response = content
         else:
-            log.error('got empty response: %s' % url)
-            raise EmptyResponseError()
+            response = content
 
         return response
 
@@ -97,30 +103,23 @@ class TokenSession(PublicSession):
 
     __slots__ = ('app_id', 'private_key', 'secret_key', 'session_key', 'uid')
 
-    def __init__(self, app_id, private_key, secret_key, access_token, uid,
-                 cookies=(), pass_error=False, session=None, **kwargs):
+    def __init__(
+            self,
+            app_id,
+            private_key,
+            secret_key,
+            access_token,
+            uid,
+            pass_error=False,
+            session=None,
+            **kwargs,
+        ):
         super().__init__(pass_error, session)
         self.app_id = app_id
         self.private_key = private_key
         self.secret_key = secret_key
         self.session_key = access_token
         self.uid = uid
-        self.cookies = cookies
-
-    @property
-    def cookies(self):
-        """HTTP cookies from cookie jar."""
-        return [Cookie.from_morsel(m) for m in self.session.cookie_jar]
-
-    @cookies.setter
-    def cookies(self, cookies):
-        loose_cookies = []
-
-        for cookie in cookies:
-            loose_cookie = Cookie.to_morsel(cookie)
-            loose_cookies.append((loose_cookie.key, loose_cookie))
-
-        self.session.cookie_jar.update_cookies(loose_cookies)
 
     @property
     def sig_circuit(self):
@@ -195,11 +194,8 @@ class TokenSession(PublicSession):
         elif 'error' in content:
             log.error(content)
             raise APIError(content)
-        elif content:
-            response = content
         else:
-            log.error('got empty response: %s' % url)
-            raise EmptyResponseError()
+            response = content
 
         return response
 
@@ -274,16 +270,14 @@ class CodeSession(TokenSession):
         if 'error' in content:
             log.error(content)
             raise OAuthError(content)
-        elif content:
-            try:
-                self.refresh_token = content['refresh_token']
-                self.expires_in = content['expires_in']
-                self.session_key = content['access_token']
-                self.uid = content['x_mailru_vid']
-            except KeyError as e:
-                raise OAuthError('%r is missing in the response' % e.args[0])
-        else:
-            raise OAuthError('got empty authorization response')
+
+        try:
+            self.refresh_token = content['refresh_token']
+            self.expires_in = content['expires_in']
+            self.session_key = content['access_token']
+            self.uid = content['x_mailru_vid']
+        except KeyError as e:
+            raise OAuthError('%r is missing in the response' % e.args[0])
 
         return self
 
@@ -303,202 +297,6 @@ class CodeServerSession(CodeSession):
     def __init__(self, app_id, secret_key, code, redirect_uri,
                  pass_error=False, session=None, **kwargs):
         super().__init__(app_id, '', secret_key, code, redirect_uri,
-                         pass_error, session, **kwargs)
-
-
-class ImplicitSession(TokenSession):
-    """Session with authorization with OAuth 2.0 (Implicit Grant).
-
-    The Implicit flow was a simplified OAuth flow previously recommended
-    for native apps and JavaScript apps where the access token was returned
-    immediately without an extra authorization code exchange step.
-
-    .. _OAuth 2.0 Implicit Grant
-        https://oauth.net/2/grant-types/implicit/
-
-    .. _Авторизация для Standalone-приложений
-        https://api.mail.ru/docs/guides/oauth/standalone/
-
-    """
-
-    OAUTH_URL = 'https://connect.mail.ru/oauth/authorize'
-    REDIRECT_URI = 'http%3A%2F%2Fconnect.mail.ru%2Foauth%2Fsuccess.html'
-
-    AUTHORIZE_NUM_ATTEMPTS = 1
-    AUTHORIZE_RETRY_INTERVAL = 3
-
-    GET_AUTH_DIALOG_ERROR_MSG = 'Failed to open authorization dialog.'
-    POST_AUTH_DIALOG_ERROR_MSG = 'Form submission failed.'
-    GET_ACCESS_TOKEN_ERROR_MSG = 'Failed to receive access token.'
-    POST_ACCESS_DIALOG_ERROR_MSG = 'Failed to process access dialog.'
-
-    __slots__ = ('email', 'passwd', 'scope',
-                 'refresh_token', 'expires_in', 'token_type')
-
-    def __init__(self, app_id, private_key, secret_key, email, passwd, scope,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, secret_key, '', '', (),
-                         pass_error, session, **kwargs)
-        self.email = email
-        self.passwd = passwd
-        self.scope = scope or full_scope()
-
-    @property
-    def params(self):
-        """Authorization request's parameters."""
-        return {
-            'client_id': self.app_id,
-            'redirect_uri': self.REDIRECT_URI,
-            'response_type': 'token',
-            'scope': self.scope,
-        }
-
-    async def authorize(self, num_attempts=None, retry_interval=None):
-        """Authorize with OAuth 2.0 (Implicit flow)."""
-
-        num_attempts = num_attempts or self.AUTHORIZE_NUM_ATTEMPTS
-        retry_interval = retry_interval or self.AUTHORIZE_RETRY_INTERVAL
-
-        for attempt_num in range(num_attempts):
-            log.debug('getting authorization dialog %s' % self.OAUTH_URL)
-            url, html = await self._get_auth_dialog()
-
-            if 'Не указано приложение' in html:
-                raise InvalidClientError()
-            elif url.path == '/oauth/authorize':
-                log.debug('authorizing at %s' % url)
-                url, html = await self._post_auth_dialog(html)
-
-            if url.path == '/oauth/authorize':
-                if 'fail' in url.query:
-                    log.error('Invalid e-mail %s or password.' % self.email)
-                    raise InvalidGrantError()
-                elif 'Необходим доступ к вашим данным' in html:
-                    log.debug('giving rights at %s' % url)
-                    url, html = await self._post_access_dialog(html)
-
-            if 'Авторизация запрещена' in html:
-                log.debug('access denied')
-                raise ClientNotAvailableError()
-            elif url.path == '/oauth/success.html':
-                log.debug('getting access token')
-                await self._get_access_token()
-                log.debug('authorized successfully')
-                return self
-            elif url.path == '/recovery':
-                log.error('User %s is blocked.' % self.email)
-                raise InvalidUserError()
-
-            await asyncio.sleep(retry_interval)
-        else:
-            log.error('%d login attempts exceeded.' % num_attempts)
-            raise OAuthError('%d login attempts exceeded.' % num_attempts)
-
-    async def _get_auth_dialog(self):
-        """Returns url and html code of authorization dialog."""
-
-        async with self.session.get(self.OAUTH_URL, params=self.params) as resp:
-            if resp.status != 200:
-                log.error(self.GET_AUTH_DIALOG_ERROR_MSG)
-                raise OAuthError(self.GET_AUTH_DIALOG_ERROR_MSG)
-            else:
-                url, html = resp.url, await resp.text()
-
-        return url, html
-
-    async def _post_auth_dialog(self, html):
-        """Submits a form with e-mail, password and domain
-        to get access token and user id.
-
-        Args:
-            html (str): authorization page's html code.
-
-        Returns:
-            url (URL): redirected page's url.
-            html (str): redirected page's html code.
-
-        """
-
-        parser = AuthPageParser()
-        parser.feed(html)
-        form_url, form_data = parser.form
-        parser.close()
-
-        domain, login = parseaddr(self.email)
-        form_data['Login'] = login
-        form_data['Domain'] = domain + '.ru'
-        form_data['Password'] = self.passwd
-
-        async with self.session.post(form_url, data=form_data) as resp:
-            if resp.status != 200:
-                log.error(self.POST_AUTH_DIALOG_ERROR_MSG)
-                raise OAuthError(self.POST_AUTH_DIALOG_ERROR_MSG)
-            else:
-                url, html = resp.url, await resp.text()
-
-        return url, html
-
-    async def _post_access_dialog(self, html):
-        """Clicks button 'allow' in a page with access dialog.
-
-        Args:
-            html (str): html code of the page with access form.
-
-        Returns:
-            url (URL): redirected page's URL.
-            html (str): redirected page's html code.
-
-        """
-
-        parser = AccessPageParser()
-        parser.feed(html)
-        parser.close()
-
-        form_url, form_data = parser.form
-
-        async with self.session.post(form_url, data=form_data) as resp:
-            if resp.status != 200:
-                log.error(self.POST_ACCESS_DIALOG_ERROR_MSG)
-                raise OAuthError(self.POST_ACCESS_DIALOG_ERROR_MSG)
-            else:
-                url, html = resp.url, await resp.text()
-
-        return url, html
-
-    async def _get_access_token(self):
-        async with self.session.get(self.OAUTH_URL, params=self.params) as resp:
-            if resp.status != 200:
-                log.error(self.GET_ACCESS_TOKEN_ERROR_MSG)
-                raise OAuthError(self.GET_ACCESS_TOKEN_ERROR_MSG)
-            else:
-                location = URL(resp.history[-1].headers['Location'])
-                url = URL('?' + location.fragment)
-
-        try:
-            self.session_key = url.query['access_token']
-            self.expires_in = url.query.get('expires_in')
-            self.refresh_token = url.query['refresh_token']
-            self.token_type = url.query.get('token_type')
-            self.uid = url.query.get('x_mailru_vid')
-        except KeyError as e:
-            raise OAuthError('%r is missing in the response' % e.args[0])
-
-
-class ImplicitClientSession(ImplicitSession):
-    """`ImplicitSession` without `secret_key` argument."""
-
-    def __init__(self, app_id, private_key, email, passwd, scope,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, '', email, passwd, scope,
-                         pass_error, session, **kwargs)
-
-
-class ImplicitServerSession(ImplicitSession):
-    """`ImplicitSession` without `private_key` argument."""
-
-    def __init__(self, app_id, secret_key, email, passwd, scope,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, '', secret_key, email, passwd, scope,
                          pass_error, session, **kwargs)
 
 
@@ -549,16 +347,14 @@ class PasswordSession(TokenSession):
         if 'error' in content:
             log.error(content)
             raise OAuthError(content)
-        elif content:
-            try:
-                self.refresh_token = content['refresh_token']
-                self.expires_in = content.get('expires_in')
-                self.session_key = content['access_token']
-                self.uid = content.get('x_mailru_vid')
-            except KeyError as e:
-                raise OAuthError('%r is missing in the response' % e.args[0])
-        else:
-            raise OAuthError('got empty authorization response')
+
+        try:
+            self.refresh_token = content['refresh_token']
+            self.expires_in = content.get('expires_in')
+            self.session_key = content['access_token']
+            self.uid = content.get('x_mailru_vid')
+        except KeyError as e:
+            raise OAuthError('%r is missing in the response' % e.args[0])
 
         return self
 
@@ -624,16 +420,14 @@ class RefreshSession(TokenSession):
         if 'error' in content:
             log.error(content)
             raise OAuthError(content)
-        elif content:
-            try:
-                self.refresh_token = content['refresh_token']
-                self.expires_in = content.get('expires_in')
-                self.session_key = content['access_token']
-                self.uid = content.get('x_mailru_vid')
-            except KeyError as e:
-                raise OAuthError('%r is missing in the response' % e.args[0])
-        else:
-            raise OAuthError('got empty authorization response')
+
+        try:
+            self.refresh_token = content['refresh_token']
+            self.expires_in = content.get('expires_in')
+            self.session_key = content['access_token']
+            self.uid = content.get('x_mailru_vid')
+        except KeyError as e:
+            raise OAuthError('%r is missing in the response' % e.args[0])
 
         return self
 

@@ -1,22 +1,23 @@
+import asyncio
 import json
-from os.path import dirname, join
+from typing import Generator
 
 import pytest
 
 from aiomailru.sessions import PublicSession
 
 
-data_path = join(dirname(__file__), 'data')
+@pytest.fixture(scope='session')
+def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
+    """Event loop."""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
 @pytest.fixture
 def error():
     return {'error': {'error_code': -1, 'error_msg': 'test error msg'}}
-
-
-@pytest.fixture
-def dummy():
-    return {}
 
 
 @pytest.fixture
@@ -35,32 +36,10 @@ async def error_server(httpserver, error):
 
 
 @pytest.yield_fixture
-async def dummy_server(httpserver, dummy):
-    httpserver.serve_content(**{
-        'code': 401,
-        'headers': {'Content-Type': PublicSession.CONTENT_TYPE},
-        'content': json.dumps(dummy),
-    })
-    return httpserver
-
-
-@pytest.yield_fixture
 async def data_server(httpserver, data):
     httpserver.serve_content(**{
-        'code': 401,
+        'code': 200,
         'headers': {'Content-Type': PublicSession.CONTENT_TYPE},
         'content': json.dumps(data),
     })
     return httpserver
-
-
-@pytest.fixture
-def auth_dialog():
-    with open(join(data_path, 'dialogs', 'auth_dialog.html')) as f:
-        return f.read()
-
-
-@pytest.fixture
-def access_dialog():
-    with open(join(data_path, 'dialogs', 'access_dialog.html')) as f:
-        return f.read()
