@@ -14,7 +14,7 @@ You can install from the source code like
 
 .. code-block:: shell
 
-    $ git clone https://github.com/KonstantinTogoi/aiomailru.git
+    $ git clone https://github.com/konstantintogoi/aiomailru.git
     $ cd aiomailru
     $ python setup.py install
 

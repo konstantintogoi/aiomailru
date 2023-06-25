@@ -1,17 +1,11 @@
 .. image:: https://img.shields.io/badge/license-BSD-blue.svg
-    :target: https://github.com/KonstantinTogoi/aiomailru/blob/master/LICENSE
+    :target: https://github.com/konstantintogoi/aiomailru/blob/master/LICENSE
 
 .. image:: https://img.shields.io/pypi/v/aiomailru.svg
     :target: https://pypi.python.org/pypi/aiomailru
 
 .. image:: https://img.shields.io/pypi/pyversions/aiomailru.svg
     :target: https://pypi.python.org/pypi/aiomailru
-
-.. image:: https://readthedocs.org/projects/aiomailru/badge/?version=latest
-    :target: https://aiomailru.readthedocs.io/en/latest/
-
-.. image:: https://travis-ci.org/KonstantinTogoi/aiomailru.svg
-    :target: https://travis-ci.org/KonstantinTogoi/aiomailru
 
 .. index-start-marker1
 
@@ -31,7 +25,7 @@ Usage
 To use `Mail.Ru API <https://api.mail.ru/>`_ you need a registered app and
 `Mail.Ru <https://mail.ru>`_ account.
 For more details, see
-`aiomailru Documentation <https://aiomailru.readthedocs.io/>`_.
+`aiomailru Documentation <https://konstantintogoi.github.io/aiomailru>`_.
 
 Client application
 ~~~~~~~~~~~~~~~~~~
@@ -55,7 +49,7 @@ i.e. when you embed your app's info (private key) in publicly available code.
 
 Use :code:`access_token` and :code:`uid`
 that were received after authorization. For more details, see
-`authorization instruction <https://aiomailru.readthedocs.io/en/latest/authorization.html>`_.
+`authorization instruction <https://konstantintogoi.github.io/aiomailru/authorization>`_.
 
 Server application
 ~~~~~~~~~~~~~~~~~~
@@ -77,7 +71,7 @@ Use :code:`ServerSession` when REST API is needed in:
 
 Use :code:`access_token` that was received after authorization.
 For more details, see
-`authorization instruction <https://aiomailru.readthedocs.io/en/latest/authorization.html>`_.
+`authorization instruction <https://konstantintogoi.github.io/aiomailru/authorization>`_.
 
 Installation
 ------------
