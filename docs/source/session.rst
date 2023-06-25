@@ -8,7 +8,7 @@ Request
 -------
 
 By default, the session
-(:code:`CodeSession`, :code:`ImplicitSession`, :code:`PasswordSession`, :code:`RefreshSession`)
+(:code:`CodeSession`, :code:`PasswordSession`, :code:`RefreshSession`)
 tries to infer which signature generation circuit to use:
 
 * if :code:`uid` and :code:`private_key` are not empty strings - **client-server** signature generation circuit is used
@@ -80,19 +80,6 @@ CodeClientSession
     from aiomailru import CodeClientSession, API
 
     async with CodeClientSession(app_id, 'private key', code, redirect_uri) as session:
-        api = API(session)
-        ...
-
-ImplicitClientSession
-^^^^^^^^^^^^^^^^^^^^^
-
-:code:`ImplicitClientSession` is a subclass of :code:`ImplicitSession`.
-
-.. code-block:: python
-
-    from aiomailru import ImplicitClientSession, API
-
-    async with ImplicitClientSession(app_id, 'private key', email, passwd, scope) as session:
         api = API(session)
         ...
 
@@ -188,19 +175,6 @@ CodeServerSession
         api = API(session)
         ...
 
-ImplicitServerSession
-^^^^^^^^^^^^^^^^^^^^^
-
-:code:`ImplicitServerSession` is a subclass of :code:`ImplicitSession`.
-
-.. code-block:: python
-
-    from aiomailru import ImplicitServerSession, API
-
-    async with ImplicitServerSession(app_id, 'secret key', email, passwd, scope) as session:
-        api = API(session)
-        ...
-
 PasswordServerSession
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -210,7 +184,7 @@ PasswordServerSession
 
     from aiomailru import PasswordServerSession, API
 
-    async with PasswordServerSession(app_id, 'secret key', email, passwd, scope) as session:
+    async with PasswordServerSession(app_id, 'secret key', email, password, scope) as session:
         api = API(session)
         ...
 

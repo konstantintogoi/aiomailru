@@ -7,7 +7,6 @@ After authorization the session will have the following attributes:
 * :code:`session_key` aka :code:`access_token`
 * :code:`refresh_token`
 * :code:`expires_in`
-* :code:`token_type` if Implicit Grant used
 * :code:`uid`
 
 Authorization Code Grant
@@ -30,25 +29,6 @@ About OAuth 2.0 Authorization Code Grant: https://oauth.net/2/grant-types/author
 For more details, see https://api.mail.ru/docs/guides/oauth/sites/
 and https://api.mail.ru/docs/guides/oauth/mobile-web/
 
-Implicit Grant
---------------
-
-.. code-block:: python
-
-    from aiomailru import ImplicitSession, API
-
-    app_id = 123456
-    private_key = 'abcde'
-    secret_key = ''
-
-    async with ImplicitSession(app_id, private_key, secret_key, email, passwd, scope) as session:
-        api = API(session)
-        ...
-
-About OAuth 2.0 Implicit Grant: https://oauth.net/2/grant-types/implicit/
-
-For more details, see https://api.mail.ru/docs/guides/oauth/standalone/
-
 Password Grant
 --------------
 
@@ -60,7 +40,7 @@ Password Grant
     private_key = 'abcde'
     secret_key = ''
 
-    async with PasswordSession(app_id, private_key, secret_key, email, passwd, scope) as session:
+    async with PasswordSession(app_id, private_key, secret_key, email, password, scope) as session:
         api = API(session)
         ...
 

@@ -1,5 +1,5 @@
 .. image:: https://img.shields.io/badge/license-BSD-blue.svg
-    :target: https://github.com/KonstantinTogoi/aiomailru/blob/master/LICENSE
+    :target: https://github.com/konstantintogoi/aiomailru/blob/master/LICENSE
 
 .. image:: https://img.shields.io/pypi/v/aiomailru.svg
     :target: https://pypi.python.org/pypi/aiomailru
@@ -8,10 +8,10 @@
     :target: https://pypi.python.org/pypi/aiomailru
 
 .. image:: https://readthedocs.org/projects/aiomailru/badge/?version=latest
-    :target: https://aiomailru.readthedocs.io/en/latest/
+    :target: https://aiomailru.readthedocs.io/en/latest
 
-.. image:: https://travis-ci.org/KonstantinTogoi/aiomailru.svg
-    :target: https://travis-ci.org/KonstantinTogoi/aiomailru
+.. image:: https://github.com/konstantintogoi/aiomailru/actions/workflows/pages/pages-build-deployment/badge.svg
+    :target: https://konstantintogoi.github.io/aiomailru
 
 .. index-start-marker1
 
@@ -21,17 +21,13 @@ aiomailru
 aiomailru is a python `Mail.Ru API <https://api.mail.ru/>`_ wrapper.
 The main features are:
 
-* authorization (`Authorization Code <https://oauth.net/2/grant-types/authorization-code/>`_, `Implicit Flow <https://oauth.net/2/grant-types/implicit/>`_, `Password Grant <https://oauth.net/2/grant-types/password/>`_, `Refresh Token <https://oauth.net/2/grant-types/refresh-token/>`_)
-* `REST API <https://api.mail.ru/docs/reference/rest/>`_ methods
-* web scrapers
-
 Usage
 -----
 
 To use `Mail.Ru API <https://api.mail.ru/>`_ you need a registered app and
 `Mail.Ru <https://mail.ru>`_ account.
 For more details, see
-`aiomailru Documentation <https://aiomailru.readthedocs.io/>`_.
+`aiomailru Documentation <https://konstantintogoi.github.io/aiomailru>`_.
 
 Client application
 ~~~~~~~~~~~~~~~~~~
@@ -55,7 +51,7 @@ i.e. when you embed your app's info (private key) in publicly available code.
 
 Use :code:`access_token` and :code:`uid`
 that were received after authorization. For more details, see
-`authorization instruction <https://aiomailru.readthedocs.io/en/latest/authorization.html>`_.
+`authorization instruction <https://konstantintogoi.github.io/aiomailru/authorization>`_.
 
 Server application
 ~~~~~~~~~~~~~~~~~~
@@ -77,7 +73,7 @@ Use :code:`ServerSession` when REST API is needed in:
 
 Use :code:`access_token` that was received after authorization.
 For more details, see
-`authorization instruction <https://aiomailru.readthedocs.io/en/latest/authorization.html>`_.
+`authorization instruction <https://konstantintogoi.github.io/aiomailru/authorization>`_.
 
 Installation
 ------------
@@ -86,33 +82,12 @@ Installation
 
     $ pip install aiomailru
 
-or
-
-.. code-block:: shell
-
-    $ python setup.py install
-
 Supported Python Versions
 -------------------------
 
-Python 3.5, 3.6, 3.7 and 3.8 are supported.
+Python 3.7, 3.8, 3.9 are supported.
 
 .. index-end-marker1
-
-Test
-----
-
-Run all tests.
-
-.. code-block:: shell
-
-    $ python setup.py test
-
-Run tests with PyTest.
-
-.. code-block:: shell
-
-    $ python -m pytest [-k TEST_NAME]
 
 License
 -------
