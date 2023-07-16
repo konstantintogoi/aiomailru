@@ -1,12 +1,12 @@
+"""aiomailru setup."""
 from setuptools import find_packages, setup
-
 
 setup(
     name='aiomailru',
     version='0.1.1.post1',
     author='Konstantin Togoi',
-    author_email='konstantin.togoi@protonmail.com',
-    url='https://github.com/KonstantinTogoi/aiomailru',
+    author_email='konstantin.togoi@gmail.com',
+    url='https://github.com/konstantintogoi/aiomailru',
     project_urls={'Documentation': 'https://aiomailru.readthedocs.io'},
     download_url='https://pypi.org/project/aiomailru/',
     description='Python Mail.Ru API wrapper',
@@ -14,12 +14,11 @@ setup(
     license='BSD',
     packages=find_packages(),
     platforms=['Any'],
-    python_requires='>=3.5',
-    install_requires=['aiohttp>=3.0.0', 'yarl'],
+    python_requires='>=3.7',
+    install_requires=['httpx>=0.24.1'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest-asyncio', 'pytest-dotenv', 'pytest-localserver'],
-    extras_require={'scrapers': ['pyppeteer<=0.0.25']},
-    keywords=['mail.ru rest api scrapers asyncio'],
+    keywords=['mail.ru api'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -28,13 +27,12 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Internet',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ]
+    ],
 )

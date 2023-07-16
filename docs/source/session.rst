@@ -184,7 +184,7 @@ PasswordServerSession
 
     from aiomailru import PasswordServerSession, API
 
-    async with PasswordServerSession(app_id, 'secret key', email, passwd, scope) as session:
+    async with PasswordServerSession(app_id, 'secret key', email, password, scope) as session:
         api = API(session)
         ...
 

@@ -2,19 +2,15 @@
 import hashlib
 import logging
 from enum import Enum
+from typing import Any, Dict, Generator, Tuple
 
-import aiohttp
-
-from .exceptions import (
-    Error,
-    OAuthError,
-    APIError,
-)
+from httpx import AsyncClient, Response
 
 log = logging.getLogger(__name__)
 
 
-def full_scope():
+def full_scope() -> str:
+    """Full scope."""
     return ' '.join(['photos', 'guestbook', 'stream', 'messages', 'events'])
 
 
@@ -32,97 +28,133 @@ class SignatureCircuit(Enum):
 
 
 class Session:
-    """A wrapper around aiohttp.ClientSession."""
+    """A wrapper for httpx.AsyncClient.
 
-    __slots__ = ('pass_error', 'session')
+    Attributes:
+        client (AsyncClient): async client with default base url and encoding
+        raise_for_status (bool): whether to raise an exception when 2xx or 3xx
 
-    def __init__(self, pass_error=False, session=None):
-        self.pass_error = pass_error
-        self.session = session or aiohttp.ClientSession()
+    """
 
-    def __await__(self):
-        return self.authorize().__await__()
+    __slots__ = ('raise_for_status', 'client')
 
-    async def __aenter__(self):
-        return await self.authorize()
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self.close()
-
-    async def authorize(self):
-        return self
-
-    async def close(self):
-        await self.session.close()
+    def __init__(
+        self,
+        raise_for_status: bool = True,
+        base_url: str = 'http://appsmail.ru/platform',
+        default_encoding: str = 'text/javascript; charset=utf-8',
+    ) -> None:
+        """Set attributes."""
+        self.raise_for_status = raise_for_status
+        self.client = AsyncClient(
+            base_url=base_url,
+            default_encoding=default_encoding,
+            follow_redirects=True,
+        )
 
 
 class PublicSession(Session):
-    """Session for calling public API methods of Platform@Mail.Ru."""
+    """Session for public API methods of Platform@Mail.Ru."""
 
-    PUBLIC_URL = 'http://appsmail.ru/platform'
-    CONTENT_TYPE = 'text/javascript; charset=utf-8'
+    async def __aenter__(self) -> 'PublicSession':
+        """Enter."""
+        return self
 
-    async def public_request(self, segments=(), params=None):
-        """Requests public data.
+    async def __aexit__(self, *args: Tuple[Any, Any, Any]) -> None:
+        """Exit."""
+        await self.close()
+
+    def __await__(self) -> Generator[Any, None, 'PublicSession']:
+        """Make `PublicSession` awaitable."""
+        yield self
+
+    async def close(self) -> None:
+        """Close."""
+        if not self.client.is_closed:
+            await self.client.aclose()
+
+    async def request(
+        self,
+        path: str,
+        params: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Request public data.
 
         Args:
-            segments (tuple): additional segments for URL path.
-            params (dict): URL parameters.
+            path (str): path
+            params (Dict[str, Any]): query parameters
 
         Returns:
-            response (dict): JSON object response.
+            response (Dict[str, Any]): JSON response
+
+        Raises:
+            HTTPStatusError: if one occurred
 
         """
+        try:
+            resp: Response = await self.client.get(path, params=params)
+        except Exception:
+            log.error(f'GET {path} request failed')
+            raise
+        else:
+            log.info(f'GET {resp.url} {resp.status_code}')
 
-        url = self.PUBLIC_URL + '/' + '/'.join(segments)
+        if self.raise_for_status:
+            resp.raise_for_status()
 
         try:
-            async with self.session.get(url, params=params) as resp:
-                content = await resp.json(content_type=self.CONTENT_TYPE)
-        except aiohttp.ContentTypeError:
-            msg = 'got non-REST path: %s' % url
-            log.error(msg)
-            raise Error(msg)
-
-        if self.pass_error:
-            response = content
-        elif 'error' in content:
-            log.error(content)
-            raise APIError(content)
-        else:
-            response = content
-
-        return response
+            return resp.json()
+        except Exception:
+            log.error(f'GET {resp.url} {resp.read().decode()}')
+            raise
 
 
 class TokenSession(PublicSession):
-    """Session for executing authorized requests."""
+    """Session for executing authorized requests.
 
-    API_URL = PublicSession.PUBLIC_URL + '/api'
-    ERROR_MSG = 'See https://api.mail.ru/docs/guides/restapi/#sig.'
+    Attributes:
+        app_id (str): client id
+        private_key (str): private key
+        secret_key (str): secret key
+        session_key (str): access token
+        uid (str): user id
+
+    """
 
     __slots__ = ('app_id', 'private_key', 'secret_key', 'session_key', 'uid')
 
     def __init__(
             self,
-            app_id,
-            private_key,
-            secret_key,
-            access_token,
-            uid,
-            pass_error=False,
-            session=None,
-            **kwargs,
-        ):
-        super().__init__(pass_error, session)
+            app_id: str,
+            private_key: str,
+            secret_key: str,
+            access_token: str,
+            uid: str,
+            raise_for_status: bool = True,
+        ) -> None:
+        """Set credentials."""
+        super().__init__(raise_for_status, 'http://appsmail.ru/platform/api')
         self.app_id = app_id
         self.private_key = private_key
         self.secret_key = secret_key
         self.session_key = access_token
         self.uid = uid
 
+    async def __aenter__(self) -> 'TokenSession':
+        """Enter."""
+        return await self.authorize()
+
+    def __await__(self) -> Generator[Any, None, 'TokenSession']:
+        """Make `TokenSession` awaitable."""
+        return self.authorize().__await__()
+
+    async def authorize(self) -> 'TokenSession':
+        """Authorize."""
+        return self
+
     @property
-    def sig_circuit(self):
+    def sig_circuit(self) -> SignatureCircuit:
+        """Signature circuit."""
         if self.uid and self.private_key and self.app_id:
             return SignatureCircuit.CLIENT_SERVER
         elif self.secret_key and self.app_id:
@@ -131,14 +163,23 @@ class TokenSession(PublicSession):
             return SignatureCircuit.UNDEFINED
 
     @property
-    def required_params(self):
+    def required_params(self) -> Dict[str, Any]:
         """Required parameters."""
         params = {'app_id': self.app_id, 'session_key': self.session_key}
         if self.sig_circuit is SignatureCircuit.SERVER_SERVER:
             params['secure'] = '1'
         return params
 
-    def params_to_str(self, params):
+    def params2str(self, params: Dict[str, Any]) -> str:
+        """Convert query parameters to string.
+
+        Args:
+            params (Dict[str, Any]): query parameters
+
+        Returns:
+            str
+
+        """
         query = ''.join(k + '=' + str(params[k]) for k in sorted(params))
 
         if self.sig_circuit is SignatureCircuit.CLIENT_SERVER:
@@ -146,80 +187,73 @@ class TokenSession(PublicSession):
         elif self.sig_circuit is SignatureCircuit.SERVER_SERVER:
             return query + self.secret_key
         else:
-            raise Error(self.ERROR_MSG)
+            log.error((
+                'Signature circuit undefined. '
+                'Set "uid" and "private_key" for using client-server circuit. '
+                'Set "secret_key" for using server-server circuit.'
+            ))
+            return query
 
-    def sign_params(self, params):
-        """Signs the request parameters according to signature circuit.
+    def sign_params(self, params: Dict[str, Any]) -> str:
+        """Sign query string according to signature circuit.
+
+        See https://api.mail.ru/docs/guides/restapi/#sig.
 
         Args:
-            params (dict): request parameters
+            params (Dict[str, Any]): query parameters
 
         Returns:
-            sig (str): signature
+            str
 
         """
-
-        query = self.params_to_str(params)
+        query = self.params2str(params)
         sig = hashlib.md5(query.encode('UTF-8')).hexdigest()
         return sig
 
-    async def request(self, segments=(), params=()):
-        """Sends a request.
+    async def request(self, path: str, params: Dict[str, Any]) -> Dict[str, Any]:  # noqa
+        """Request data.
 
         Args:
-            segments (tuple): additional segments for URL path.
-            params (dict): URL parameters, contains key 'method', e.g.
-                {
-                    "method": "stream.getByAuthor",
-                    "uid": "15410773191172635989",
-                    "limit": 10,
-                }
+            path (str): path
+            params (Dict[str, Any]): query parameters
 
         Returns:
-            response (dict): JSON object response.
+            Dict[str, Any]
 
         """
-
-        url = self.API_URL + '/' + '/'.join(segments)
-
         params = {k: params[k] for k in params if params[k]}
         params.update(self.required_params)
         params.update({'sig': self.sign_params(params)})
-
-        async with self.session.get(url, params=params) as resp:
-            content = await resp.json(content_type=self.CONTENT_TYPE)
-
-        if self.pass_error:
-            response = content
-        elif 'error' in content:
-            log.error(content)
-            raise APIError(content)
-        else:
-            response = content
-
-        return response
+        return await super().request(path, params)
 
 
 class ClientSession(TokenSession):
-    """Session for executing requests in client applications."""
+    """`TokenSession` with client-server signature circuit."""
 
-    ERROR_MSG = 'Pass "uid" and "private_key" to use client-server circuit.'
-
-    def __init__(self, app_id, private_key, access_token, uid, cookies=(),
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, '', access_token, uid, cookies,
-                         pass_error, session)
+    def __init__(
+        self,
+        app_id: str,
+        private_key: str,
+        access_token: str,
+        uid: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, private_key, '', access_token, uid, raise_for_status)  # noqa
 
 
 class ServerSession(TokenSession):
-    """Session for executing requests in server applications."""
+    """`TokenSession` with server-server signature circuit."""
 
-    ERROR_MSG = 'Pass "secret_key" to use server-server circuit.'
-
-    def __init__(self, app_id, secret_key, access_token, cookies=(),
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, '', secret_key, access_token, '', cookies,
-                         pass_error, session)
+    def __init__(
+        self,
+        app_id: str,
+        secret_key: str,
+        access_token: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, '', secret_key, access_token, '', raise_for_status)  # noqa
 
 
 class CodeSession(TokenSession):
@@ -239,65 +273,90 @@ class CodeSession(TokenSession):
 
     """
 
-    OAUTH_URL = 'https://connect.mail.ru/oauth/token'
-
     __slots__ = ('code', 'redirect_uri', 'refresh_token', 'expires_in')
 
-    def __init__(self, app_id, private_key, secret_key, code, redirect_uri,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, secret_key, '', '', (),
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        private_key: str,
+        secret_key: str,
+        code: str,
+        redirect_uri: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, private_key, secret_key, '', '', raise_for_status)  # noqa
         self.code = code
         self.redirect_uri = redirect_uri
+        self.refresh_token = ''
+        self.expires_in = 0
 
     @property
-    def params(self):
-        """Authorization request's parameters."""
+    def params(self) -> Dict[str, str]:
+        """Query parameters for authorization."""
         return {
             'client_id': self.app_id,
             'client_secret': self.secret_key,
             'grant_type': 'authorization_code',
-            'code': self.code,
             'redirect_uri': self.redirect_uri,
+            'code': self.code,
         }
 
-    async def authorize(self):
-        """Authorize with OAuth 2.0 (Authorization Code)."""
+    async def authorize(self) -> 'CodeSession':
+        """Authorize with OAuth 2.0 (Authorization Code).
 
-        async with self.session.post(self.OAUTH_URL, data=self.params) as resp:
-            content = await resp.json(content_type=self.CONTENT_TYPE)
+        Returns:
+            CodeSession
 
-        if 'error' in content:
-            log.error(content)
-            raise OAuthError(content)
+        """
+        async with AsyncClient(follow_redirects=True, default_encoding='text/javascript; charset=utf-8') as cli:  # noqa
+            resp = await cli.post('https://connect.mail.ru/oauth/token', data=self.params)  # noqa
 
-        try:
-            self.refresh_token = content['refresh_token']
-            self.expires_in = content['expires_in']
-            self.session_key = content['access_token']
-            self.uid = content['x_mailru_vid']
-        except KeyError as e:
-            raise OAuthError('%r is missing in the response' % e.args[0])
+            if self.raise_for_status:
+                resp.raise_for_status()
+
+            try:
+                respjson: Dict[str, Any] = resp.json()
+            except Exception:
+                log.error(f'GET {resp.url} {resp.read().decode()}')
+                raise
+
+            self.refresh_token = respjson.get('refresh_token', '')
+            self.expires_in = respjson.get('expires_in', '')
+            self.session_key = respjson.get('access_token', '')
+            self.uid = respjson.get('x_mailru_vid', '')
 
         return self
 
 
 class CodeClientSession(CodeSession):
-    """`CodeSession` without `secret_key` argument."""
+    """`CodeSession` with client-server signature circuit."""
 
-    def __init__(self, app_id, private_key, code, redirect_uri,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, '', code, redirect_uri,
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        private_key: str,
+        code: str,
+        redirect_uri: str,
+        raise_for_status: bool = True,
+    ):
+        """Set attributes."""
+        super().__init__(app_id, private_key, '', code, redirect_uri, raise_for_status)  # noqa
 
 
 class CodeServerSession(CodeSession):
-    """`CodeSession` without `private_key` argument."""
+    """`CodeSession` with server-server signature circuit."""
 
-    def __init__(self, app_id, secret_key, code, redirect_uri,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, '', secret_key, code, redirect_uri,
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        secret_key: str,
+        code: str,
+        redirect_uri: str,
+        raise_for_status: bool = True,
+    ):
+        """Set attributes."""
+        super().__init__(app_id, '', secret_key, code, redirect_uri, raise_for_status)  # noqa
 
 
 class PasswordSession(TokenSession):
@@ -314,67 +373,95 @@ class PasswordSession(TokenSession):
 
     """
 
-    OAUTH_URL = 'https://appsmail.ru/oauth/token'
+    __slots__ = ('email', 'password', 'scope', 'refresh_token', 'expires_in')
 
-    __slots__ = ('email', 'passwd', 'scope', 'refresh_token', 'expires_in')
-
-    def __init__(self, app_id, private_key, secret_key, email, passwd, scope,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, secret_key, '', '', (),
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        private_key: str,
+        secret_key: str,
+        email: str,
+        password: str,
+        scope: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, private_key, secret_key, '', '', raise_for_status)  # noqa
         self.email = email
-        self.passwd = passwd
+        self.password = password
         self.scope = scope or full_scope()
+        self.refresh_token = ''
+        self.expires_in = 0
 
     @property
-    def params(self):
-        """Authorization request's parameters."""
+    def params(self) -> Dict[str, str]:
+        """Query parameters for authorization."""
         return {
             'grant_type': 'password',
             'client_id': self.app_id,
             'client_secret': self.secret_key,
             'username': self.email,
-            'password': self.passwd,
+            'password': self.password,
             'scope': self.scope,
         }
 
-    async def authorize(self):
-        """Authorize with OAuth 2.0 (Password Grant)."""
+    async def authorize(self) -> 'PasswordSession':
+        """Authorize with OAuth 2.0 (Password Grant).
 
-        async with self.session.post(self.OAUTH_URL, data=self.params) as resp:
-            content = await resp.json(content_type=self.CONTENT_TYPE)
+        Returns:
+            PasswordSession
 
-        if 'error' in content:
-            log.error(content)
-            raise OAuthError(content)
+        """
+        async with AsyncClient(follow_redirects=True, default_encoding='text/javascript; charset=utf-8') as cli:  # noqa
+            resp = await cli.post('https://appsmail.ru/oauth/token', data=self.params)  # noqa
 
-        try:
-            self.refresh_token = content['refresh_token']
-            self.expires_in = content.get('expires_in')
-            self.session_key = content['access_token']
-            self.uid = content.get('x_mailru_vid')
-        except KeyError as e:
-            raise OAuthError('%r is missing in the response' % e.args[0])
+            if self.raise_for_status:
+                resp.raise_for_status()
+
+            try:
+                respjson: Dict[str, Any] = resp.json()
+            except Exception:
+                log.error(f'GET {resp.url} {resp.read().decode()}')
+                raise
+
+            self.refresh_token = respjson.get('refresh_token', '')
+            self.expires_in = respjson.get('expires_in', 0)
+            self.session_key = respjson.get('access_token', '')
+            self.uid = respjson.get('x_mailru_vid', '')
 
         return self
 
 
 class PasswordClientSession(PasswordSession):
-    """`PasswordSession` without `secret_key` argument."""
+    """`PasswordSession` with client-server signature circuit."""
 
-    def __init__(self, app_id, private_key, email, passwd, scope,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, '', email, passwd, scope,
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        private_key: str,
+        email: str,
+        password: str,
+        scope: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, private_key, '', email, password, scope, raise_for_status)  # noqa
 
 
 class PasswordServerSession(PasswordSession):
-    """`PasswordSession` without `private_key` argument."""
+    """`PasswordSession` with server-server signature circuit."""
 
-    def __init__(self, app_id, secret_key, email, passwd, scope,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, '', secret_key, email, passwd, scope,
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        secret_key: str,
+        email: str,
+        password: str,
+        scope: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, '', secret_key, email, password, scope, raise_for_status)  # noqa
 
 
 class RefreshSession(TokenSession):
@@ -391,19 +478,24 @@ class RefreshSession(TokenSession):
 
     """
 
-    OAUTH_URL = 'https://appsmail.ru/oauth/token'
-
     __slots__ = ('refresh_token', 'expires_in')
 
-    def __init__(self, app_id, private_key, secret_key, refresh_token,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, secret_key, '', '', (),
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        private_key: str,
+        secret_key: str,
+        refresh_token: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, private_key, secret_key, '', '', raise_for_status)  # noqa
         self.refresh_token = refresh_token
+        self.expires_in = 0
 
     @property
-    def params(self):
-        """Authorization request's parameters."""
+    def params(self) -> Dict[str, str]:
+        """Query parameters for authorization."""
         return {
             'grant_type': 'refresh_token',
             'client_id': self.app_id,
@@ -411,40 +503,56 @@ class RefreshSession(TokenSession):
             'client_secret': self.secret_key,
         }
 
-    async def authorize(self):
-        """Authorize with OAuth 2.0 (Refresh Token)."""
+    async def authorize(self) -> 'RefreshSession':
+        """Authorize with OAuth 2.0 (Refresh Token).
 
-        async with self.session.post(self.OAUTH_URL, data=self.params) as resp:
-            content = await resp.json(content_type=self.CONTENT_TYPE)
+        Returns:
+            RefreshSession
 
-        if 'error' in content:
-            log.error(content)
-            raise OAuthError(content)
+        """
+        async with AsyncClient(follow_redirects=True, default_encoding='text/javascript; charset=utf-8') as cli:  # noqa
+            resp = await cli.post('https://appsmail.ru/oauth/token', data=self.params)  # noqa
 
-        try:
-            self.refresh_token = content['refresh_token']
-            self.expires_in = content.get('expires_in')
-            self.session_key = content['access_token']
-            self.uid = content.get('x_mailru_vid')
-        except KeyError as e:
-            raise OAuthError('%r is missing in the response' % e.args[0])
+            if self.raise_for_status:
+                resp.raise_for_status()
+
+            try:
+                respjson: Dict[str, Any] = resp.json()
+            except Exception:
+                log.error(f'GET {resp.url} {resp.read().decode()}')
+                raise
+
+            self.refresh_token = respjson.get('refresh_token', '')
+            self.expires_in = respjson.get('expires_in', 0)
+            self.session_key = respjson.get('access_token', '')
+            self.uid = respjson.get('x_mailru_vid', '')
 
         return self
 
 
 class RefreshClientSession(RefreshSession):
-    """`RefreshSession` without `secret_key` argument."""
+    """`RefreshSession` with client-server signature circuit."""
 
-    def __init__(self, app_id, private_key, refresh_token,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, private_key, '', refresh_token,
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        private_key: str,
+        refresh_token: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, private_key, '', refresh_token, raise_for_status)  # noqa
 
 
 class RefreshServerSession(RefreshSession):
-    """`RefreshSession` without `private_key` argument."""
+    """`RefreshSession` with server-server signature circuit."""
 
-    def __init__(self, app_id, secret_key, refresh_token,
-                 pass_error=False, session=None, **kwargs):
-        super().__init__(app_id, '', secret_key, refresh_token,
-                         pass_error, session, **kwargs)
+    def __init__(
+        self,
+        app_id: str,
+        secret_key: str,
+        refresh_token: str,
+        raise_for_status: bool = True,
+    ) -> None:
+        """Set attributes."""
+        super().__init__(app_id, '', secret_key, refresh_token, raise_for_status)  # noqa

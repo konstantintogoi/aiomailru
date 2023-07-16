@@ -40,7 +40,7 @@ Password Grant
     private_key = 'abcde'
     secret_key = ''
 
-    async with PasswordSession(app_id, private_key, secret_key, email, passwd, scope) as session:
+    async with PasswordSession(app_id, private_key, secret_key, email, password, scope) as session:
         api = API(session)
         ...
 
