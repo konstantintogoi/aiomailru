@@ -1,0 +1,829 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://konstantintogoi.github.io/aiomailru/session/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.0">
+    
+    
+      
+        <title>Session - aiomailru</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.69437709.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#session" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="aiomailru" class="md-header__button md-logo" aria-label="aiomailru" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            aiomailru
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Session
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/konstantintogoi/aiomailru" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aiomailru
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="aiomailru" class="md-nav__button md-logo" aria-label="aiomailru" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    aiomailru
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/konstantintogoi/aiomailru" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aiomailru
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authorization/" class="md-nav__link">
+        Authorization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Session
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Session
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#request" class="md-nav__link">
+    Request
+  </a>
+  
+    <nav class="md-nav" aria-label="Request">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-server-signature-generation-circuit" class="md-nav__link">
+    Client-Server signature generation circuit
+  </a>
+  
+    <nav class="md-nav" aria-label="Client-Server signature generation circuit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clientsession" class="md-nav__link">
+    ClientSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codeclientsession" class="md-nav__link">
+    CodeClientSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passwordclientsession" class="md-nav__link">
+    PasswordClientSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refreshclientsession" class="md-nav__link">
+    RefreshClientSession
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-server-signature-generation-circuit" class="md-nav__link">
+    Server-Server signature generation circuit
+  </a>
+  
+    <nav class="md-nav" aria-label="Server-Server signature generation circuit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serversession" class="md-nav__link">
+    ServerSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codeserversession" class="md-nav__link">
+    CodeServerSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passwordserversession" class="md-nav__link">
+    PasswordServerSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refreshserversession" class="md-nav__link">
+    RefreshServerSession
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response" class="md-nav__link">
+    Response
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error" class="md-nav__link">
+    Error
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest_api/" class="md-nav__link">
+        REST API
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#request" class="md-nav__link">
+    Request
+  </a>
+  
+    <nav class="md-nav" aria-label="Request">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-server-signature-generation-circuit" class="md-nav__link">
+    Client-Server signature generation circuit
+  </a>
+  
+    <nav class="md-nav" aria-label="Client-Server signature generation circuit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clientsession" class="md-nav__link">
+    ClientSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codeclientsession" class="md-nav__link">
+    CodeClientSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passwordclientsession" class="md-nav__link">
+    PasswordClientSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refreshclientsession" class="md-nav__link">
+    RefreshClientSession
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-server-signature-generation-circuit" class="md-nav__link">
+    Server-Server signature generation circuit
+  </a>
+  
+    <nav class="md-nav" aria-label="Server-Server signature generation circuit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serversession" class="md-nav__link">
+    ServerSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codeserversession" class="md-nav__link">
+    CodeServerSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passwordserversession" class="md-nav__link">
+    PasswordServerSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refreshserversession" class="md-nav__link">
+    RefreshServerSession
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response" class="md-nav__link">
+    Response
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error" class="md-nav__link">
+    Error
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/konstantintogoi/aiomailru/edit/master/docs/session.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="session">Session</h1>
+<p>The session makes <strong>GET</strong> requests when you call instance of <code>APIMethod</code>
+class that are returned as attributes of an <code>API</code> class instance.</p>
+<h2 id="request">Request</h2>
+<p>By default, the session (<code>CodeSession</code>, <code>PasswordSession</code>, <code>RefreshSession</code>)
+tries to infer which signature generation circuit to use:</p>
+<ul>
+<li>if <code>uid</code> and <code>private_key</code> are not empty strings - <strong>client-server</strong> signature generation circuit is used</li>
+<li>else if <code>secret_key</code> is not an empty string - <strong>server-server</strong> signature generation circuit is used</li>
+<li>else exception is raised</li>
+</ul>
+<p>You can explicitly set a signature generation circuit for signing requests
+by passing to <code>API</code> one of the sessions below.</p>
+<h3 id="client-server-signature-generation-circuit">Client-Server signature generation circuit</h3>
+<p>Let's consider the following example of API request with client-server signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">TokenSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">session</span> <span class="o">=</span> <span class="n">TokenSession</span><span class="p">(</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">app_id</span><span class="o">=</span><span class="mi">423004</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">private_key</span><span class="o">=</span><span class="s1">&#39;7815696ecbf1c96e6894b779456d330e&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">secret_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">access_token</span><span class="o">=</span><span class="s1">&#39;be6ef89965d58e56dec21acb9b62bdaa&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;1324730981306483817&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">friends</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">friends</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</code></pre></div>
+<p>It is equivalent to <strong>GET</strong> request:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>https://appsmail.ru/platform/api
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span>?method<span class="o">=</span>friends.get
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="p">&amp;</span><span class="nv">app_id</span><span class="o">=</span><span class="m">423004</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="p">&amp;</span><span class="nv">session_key</span><span class="o">=</span>be6ef89965d58e56dec21acb9b62bdaa
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">&amp;</span><span class="nv">sig</span><span class="o">=</span>5073f15c6d5b6ab2fde23ac43332b002
+</code></pre></div>
+<p>The following steps were taken:</p>
+<ol>
+<li>request parameters were sorted and concatenated - <code>app_id=423004method=friends.getsession_key=be6ef89965d58e56dec21acb9b62bdaa</code></li>
+<li><code>uid</code>, sorted request parameters, <code>private_key</code> were concatenated - <code>1324730981306483817app_id=423004method=friends.getsession_key=be6ef89965d58e56dec21acb9b62bdaa7815696ecbf1c96e6894b779456d330e</code></li>
+<li>signature <code>5073f15c6d5b6ab2fde23ac43332b002</code> calculated as MD5 of the previous string</li>
+<li>signature appended to <strong>GET</strong> request parameters</li>
+</ol>
+<p>For more details, see https://api.mail.ru/docs/guides/restapi/#client.</p>
+<h4 id="clientsession">ClientSession</h4>
+<p><code>ClientSession</code> is a subclass of <code>TokenSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">ClientSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">session</span> <span class="o">=</span> <span class="n">ClientSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;private key&#39;</span><span class="p">,</span> <span class="s1">&#39;access token&#39;</span><span class="p">,</span> <span class="n">uid</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="o">...</span>
+</code></pre></div>
+<h4 id="codeclientsession">CodeClientSession</h4>
+<p><code>CodeClientSession</code> is a subclass of <code>CodeSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">CodeClientSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">async</span> <span class="k">with</span> <span class="n">CodeClientSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;private key&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">redirect_uri</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<h4 id="passwordclientsession">PasswordClientSession</h4>
+<p><code>PasswordClientSession</code> is a subclass of <code>PasswordSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">PasswordClientSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">async</span> <span class="k">with</span> <span class="n">PasswordClientSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;private key&#39;</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">passwd</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<h4 id="refreshclientsession">RefreshClientSession</h4>
+<p><code>RefreshClientSession</code> is a subclass of <code>RefreshSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">RefreshClientSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">async</span> <span class="k">with</span> <span class="n">RefreshClientSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;private key&#39;</span><span class="p">,</span> <span class="n">refresh_token</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<h3 id="server-server-signature-generation-circuit">Server-Server signature generation circuit</h3>
+<p>Let's consider the following example of API request with server-server signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">TokenSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">session</span> <span class="o">=</span> <span class="n">TokenSession</span><span class="p">(</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">app_id</span><span class="o">=</span><span class="mi">423004</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">private_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">secret_key</span><span class="o">=</span><span class="s1">&#39;3dad9cbf9baaa0360c0f2ba372d25716&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="n">access_token</span><span class="o">=</span><span class="s1">&#39;be6ef89965d58e56dec21acb9b62bdaa&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">)</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="n">friends</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">friends</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</code></pre></div>
+<p>It is equivalent to <strong>GET</strong> request:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>https://appsmail.ru/platform/api
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span>?method<span class="o">=</span>friends.get
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="p">&amp;</span><span class="nv">app_id</span><span class="o">=</span><span class="m">423004</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="p">&amp;</span><span class="nv">session_key</span><span class="o">=</span>be6ef89965d58e56dec21acb9b62bdaa
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="p">&amp;</span><span class="nv">sig</span><span class="o">=</span>4a05af66f80da18b308fa7e536912bae
+</code></pre></div>
+<p>The following steps were taken:</p>
+<ol>
+<li>parameter <code>secure</code> = <code>1</code> appended to parameters</li>
+<li>request parameters were sorted and concatenated - <code>app_id=423004method=friends.getsecure=1session_key=be6ef89965d58e56dec21acb9b62bdaa</code></li>
+<li>sorted request parameters and <code>secret_key</code> were concatenated - <code>1324730981306483817app_id=423004method=friends.getsession_key=be6ef89965d58e56dec21acb9b62bdaa3dad9cbf9baaa0360c0f2ba372d25716</code></li>
+<li>signature <code>4a05af66f80da18b308fa7e536912bae</code> calculated as MD5 of the previous string</li>
+<li>signature appended to <strong>GET</strong> request parameters</li>
+</ol>
+<p>For more details, see  https://api.mail.ru/docs/guides/restapi/#server.</p>
+<h4 id="serversession">ServerSession</h4>
+<p><code>ServerSession</code> is a subclass of <code>TokenSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">ServerSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">session</span> <span class="o">=</span> <span class="n">ServerSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;secret key&#39;</span><span class="p">,</span> <span class="s1">&#39;access token&#39;</span><span class="p">)</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="o">...</span>
+</code></pre></div>
+<h4 id="codeserversession">CodeServerSession</h4>
+<p><code>CodeServerSession</code> is a subclass of <code>CodeSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">CodeServerSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">async</span> <span class="k">with</span> <span class="n">CodeServerSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;secret key&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">redirect_uri</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<h4 id="passwordserversession">PasswordServerSession</h4>
+<p><code>PasswordServerSession</code> is a subclass of <code>PasswordSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">PasswordServerSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">async</span> <span class="k">with</span> <span class="n">PasswordServerSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;secret key&#39;</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<h4 id="refreshserversession">RefreshServerSession</h4>
+<p><code>RefreshServerSession</code> is a subclass of <code>RefreshSession</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span> <span class="nn">aiomailru</span> <span class="kn">import</span> <span class="n">RefreshServerSession</span><span class="p">,</span> <span class="n">API</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">async</span> <span class="k">with</span> <span class="n">RefreshServerSession</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s1">&#39;secret key&#39;</span><span class="p">,</span> <span class="n">refresh_token</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<h2 id="response">Response</h2>
+<p>By default, a session after executing request returns response's body
+as <code>dict</code> if executing was successful, otherwise it raises exception.</p>
+<p>You can pass <code>pass_error</code> parameter to <code>TokenSession</code>
+for returning original response (including errors).</p>
+<h2 id="error">Error</h2>
+<p>In case of an error, by default, exception is raised.
+You can pass <code>pass_error</code> parameter to <code>TokenSession</code>
+for returning original error's body as <code>dict</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>        <span class="s2">&quot;error_code&quot;</span><span class="p">:</span> <span class="mi">202</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>        <span class="s2">&quot;error_msg&quot;</span><span class="p">:</span> <span class="s2">&quot;Access to this object is denied&quot;</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="p">}</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
+</code></pre></div>
+
+
+
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../authorization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Authorization" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Authorization
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../rest_api/" class="md-footer__link md-footer__link--next" aria-label="Next: REST API" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              REST API
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.9c69f0bc.min.js"></script>
+      
+    
+  </body>
+</html>
