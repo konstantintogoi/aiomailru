@@ -29,12 +29,3 @@ Application
 After signing up visit Mail.Ru API
 `documentation page <https://api.mail.ru/docs/>`_
 and create a new application: https://api.mail.ru/apps/my/add.
-
-Save **client_id** (aka **app_id**), **private_key** and **secret_key**
-for user authorization and executing API requests.
-
-.. code-block:: python
-
-    app_id = 'your_client_id'
-    private_key = 'your_private_key'
-    secret_key = 'your_secret_key'

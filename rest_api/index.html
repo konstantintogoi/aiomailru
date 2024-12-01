@@ -10,8 +10,13 @@
       
         <link rel="canonical" href="https://konstantintogoi.github.io/aiomailru/rest_api/">
       
+      
+        <link rel="prev" href="../session/">
+      
+      
+      
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.0">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.2.7">
     
     
       
@@ -19,14 +24,17 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.69437709.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.046329b4.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.85d0ee34.min.css">
       
       
+
+
     
+    
+      
     
     
       
@@ -44,6 +52,7 @@
 
     
     
+    
   </head>
   
   
@@ -54,7 +63,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     
@@ -78,7 +87,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="aiomailru" class="md-header__button md-logo" aria-label="aiomailru" data-md-component="logo">
       
@@ -87,6 +98,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
+      
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -106,31 +118,36 @@
       </div>
     </div>
     
-      <form class="md-header__option" data-md-component="palette">
-        
-          
-          
-          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
-          
-            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
-            </label>
-          
-        
-          
-          
-          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
-          
-            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
-            </label>
-          
-        
-      </form>
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
     
     
     
       <label class="md-header__button md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -139,12 +156,15 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -156,7 +176,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -168,7 +188,7 @@
         <a href="https://github.com/konstantintogoi/aiomailru" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     aiomailru
@@ -198,6 +218,7 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="aiomailru" class="md-nav__button md-logo" aria-label="aiomailru" data-md-component="logo">
@@ -213,7 +234,7 @@
       <a href="https://github.com/konstantintogoi/aiomailru" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     aiomailru
@@ -225,14 +246,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -240,14 +265,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../getting_started/" class="md-nav__link">
-        Getting Started
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
       </a>
     </li>
   
@@ -255,14 +284,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../authorization/" class="md-nav__link">
-        Authorization
+        
+  
+  <span class="md-ellipsis">
+    Authorization
+  </span>
+  
+
       </a>
     </li>
   
@@ -270,14 +303,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../session/" class="md-nav__link">
-        Session
+        
+  
+  <span class="md-ellipsis">
+    Session
+  </span>
+  
+
       </a>
     </li>
   
@@ -285,8 +322,6 @@
     
       
       
-      
-
   
   
     
@@ -294,19 +329,31 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          REST API
+          
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        REST API
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
       </a>
       
         
@@ -328,170 +375,6 @@
   <a href="#executing-requests" class="md-nav__link">
     Executing requests
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#objects" class="md-nav__link">
-    Objects
-  </a>
-  
-    <nav class="md-nav" aria-label="Objects">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#user" class="md-nav__link">
-    User
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#event" class="md-nav__link">
-    Event
-  </a>
-  
-    <nav class="md-nav" aria-label="Event">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#event-types" class="md-nav__link">
-    Event types
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#like" class="md-nav__link">
-    Like
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#comment" class="md-nav__link">
-    Comment
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#attachments" class="md-nav__link">
-    Attachments
-  </a>
-  
-    <nav class="md-nav" aria-label="Attachments">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#text" class="md-nav__link">
-    text
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tag" class="md-nav__link">
-    tag
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#link" class="md-nav__link">
-    link
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#avatar" class="md-nav__link">
-    avatar
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#image" class="md-nav__link">
-    image
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#music" class="md-nav__link">
-    music
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#video" class="md-nav__link">
-    video
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#app" class="md-nav__link">
-    app
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#group" class="md-nav__link">
-    group
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#gift" class="md-nav__link">
-    gift
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#other" class="md-nav__link">
-    Other
-  </a>
-  
-    <nav class="md-nav" aria-label="Other">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cover" class="md-nav__link">
-    Cover
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#target-album" class="md-nav__link">
-    Target Album
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -536,170 +419,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#objects" class="md-nav__link">
-    Objects
-  </a>
-  
-    <nav class="md-nav" aria-label="Objects">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#user" class="md-nav__link">
-    User
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#event" class="md-nav__link">
-    Event
-  </a>
-  
-    <nav class="md-nav" aria-label="Event">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#event-types" class="md-nav__link">
-    Event types
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#like" class="md-nav__link">
-    Like
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#comment" class="md-nav__link">
-    Comment
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#attachments" class="md-nav__link">
-    Attachments
-  </a>
-  
-    <nav class="md-nav" aria-label="Attachments">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#text" class="md-nav__link">
-    text
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tag" class="md-nav__link">
-    tag
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#link" class="md-nav__link">
-    link
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#avatar" class="md-nav__link">
-    avatar
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#image" class="md-nav__link">
-    image
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#music" class="md-nav__link">
-    music
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#video" class="md-nav__link">
-    video
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#app" class="md-nav__link">
-    app
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#group" class="md-nav__link">
-    group
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#gift" class="md-nav__link">
-    gift
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#other" class="md-nav__link">
-    Other
-  </a>
-  
-    <nav class="md-nav" aria-label="Other">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cover" class="md-nav__link">
-    Cover
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#target-album" class="md-nav__link">
-    Target Album
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -708,14 +427,14 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-  <a href="https://github.com/konstantintogoi/aiomailru/edit/master/docs/rest_api.md" title="Edit this page" class="md-content__button md-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+                  
 
+  
+  
 
 
 <h1 id="rest-api">REST API</h1>
@@ -742,935 +461,21 @@ as an attribute of other <code>APIMethod</code> class instance.</p>
 <ul>
 <li><code>sig</code>, see https://api.mail.ru/docs/guides/restapi/#sig</li>
 </ul>
-<h2 id="objects">Objects</h2>
-<p>Some objects are returned in several methods.</p>
-<h3 id="user">User</h3>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-<th><strong>description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>uid</strong> <br> <code>string</code></td>
-<td>User ID.</td>
-</tr>
-<tr>
-<td><strong>first_name</strong> <br> <code>string</code></td>
-<td>First name.</td>
-</tr>
-<tr>
-<td><strong>last_name</strong> <br> <code>string</code></td>
-<td>Last name.</td>
-</tr>
-<tr>
-<td><strong>nick</strong> <br> <code>string</code></td>
-<td>Nickname.</td>
-</tr>
-<tr>
-<td><strong>status_text</strong> <br> <code>string</code></td>
-<td>User status.</td>
-</tr>
-<tr>
-<td><strong>email</strong> <br> <code>string</code></td>
-<td>E-mail address.</td>
-</tr>
-<tr>
-<td><strong>sex</strong> <br> <code>integer, [0,1]</code></td>
-<td>User sex. Possible values: <br> - <em>0</em> - male <br> - <em>1</em> - female</td>
-</tr>
-<tr>
-<td><strong>show_age</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user allows to show the age.</td>
-</tr>
-<tr>
-<td><strong>birthday</strong> <br> <code>string</code></td>
-<td>User's date of birth. Returned as DD.MM.YYYY.</td>
-</tr>
-<tr>
-<td><strong>has_my</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user has profile.</td>
-</tr>
-<tr>
-<td><strong>has_pic</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user has profile photo.</td>
-</tr>
-<tr>
-<td><strong>pic</strong> <br> <code>string</code></td>
-<td>URL of user's photo.</td>
-</tr>
-<tr>
-<td><strong>pic_small</strong> <br> <code>string</code></td>
-<td>URL of user's photo with at most 45 pixels on the longest side.</td>
-</tr>
-<tr>
-<td><strong>pic_big</strong> <br> <code>string</code></td>
-<td>URL of user's photo with at most 600 pixels on the longest side.</td>
-</tr>
-<tr>
-<td><strong>pic_22</strong> <br> <code>string</code></td>
-<td>URL of square photo of the user photo with 22 pixels in width.</td>
-</tr>
-<tr>
-<td><strong>pic_32</strong> <br> <code>string</code></td>
-<td>URL of square photo of the user photo with 32 pixels in width.</td>
-</tr>
-<tr>
-<td><strong>pic_40</strong> <br> <code>string</code></td>
-<td>URL of square photo of the user photo with 40 pixels in width.</td>
-</tr>
-<tr>
-<td><strong>pic_50</strong> <br> <code>string</code></td>
-<td>URL of square photo of the user photo with 50 pixels in width.</td>
-</tr>
-<tr>
-<td><strong>pic_128</strong> <br> <code>string</code></td>
-<td>URL of square photo of the user photo with 128 pixels in width.</td>
-</tr>
-<tr>
-<td><strong>pic_180</strong> <br> <code>string</code></td>
-<td>URL of square photo of the user photo with 180 pixels in width.</td>
-</tr>
-<tr>
-<td><strong>pic_190</strong> <br> <code>string</code></td>
-<td>URL of square photo of the user photo with 190 pixels in width.</td>
-</tr>
-<tr>
-<td><strong>link</strong> <br> <code>string</code></td>
-<td>Returns a website address of a user profile.</td>
-</tr>
-<tr>
-<td><strong>referer_type</strong> <br> <code>string</code></td>
-<td>Referer type. Possible values: <br> - <em>stream.install</em> <br> - <em>stream.publish</em> <br> - <em>invitation</em> <br> - <em>catalog</em> <br> - <em>suggests</em> <br> - <em>left menu suggest</em> <br> - <em>new apps</em> <br> - <em>guestbook</em> <br> - <em>agent</em></td>
-</tr>
-<tr>
-<td><strong>referer_id</strong> <br> <code>string</code></td>
-<td>Identifies where a user came from; <br> see https://api.mail.ru/docs/guides/ref/.</td>
-</tr>
-<tr>
-<td><strong>is_online</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user is online.</td>
-</tr>
-<tr>
-<td><strong>is_friend</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user is a friend of current user.</td>
-</tr>
-<tr>
-<td><strong>friends_count</strong> <br> <code>integer</code></td>
-<td>Number of friends.</td>
-</tr>
-<tr>
-<td><strong>follower</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user is a follower of current user.</td>
-</tr>
-<tr>
-<td><strong>following</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether current user is a follower of the user.</td>
-</tr>
-<tr>
-<td><strong>subscribe</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether current user is a subscriber of the user.</td>
-</tr>
-<tr>
-<td><strong>subscribers_count</strong> <br> <code>integer</code></td>
-<td>Number of subscribers.</td>
-</tr>
-<tr>
-<td><strong>video_count</strong> <br> <code>integer</code></td>
-<td>Number of videos.</td>
-</tr>
-<tr>
-<td><strong>is_verified</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user is verified.</td>
-</tr>
-<tr>
-<td><strong>vip</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user is vip.</td>
-</tr>
-<tr>
-<td><strong>app_installed</strong> <br> <code>integer, [0,1]</code></td>
-<td>Information whether the user has installed the current app.</td>
-</tr>
-<tr>
-<td><strong>last_visit</strong> <br> <code>integer</code></td>
-<td>Date (in Unixtime) of the last user's visit.</td>
-</tr>
-<tr>
-<td><strong>cover</strong> <br> <code>object</code></td>
-<td>Information about profile's cover; see <code>Cover</code>.</td>
-</tr>
-<tr>
-<td><strong>group_info</strong> <br> <code>object</code></td>
-<td>Object with following fields: <br> - <strong>category_id</strong> <code>integer</code> <br> - <strong>short_description</strong> <code>string</code> <br> - <strong>full_description</strong> <code>string</code> <br> - <strong>interests</strong> <code>string</code> <br> - <strong>posts_cnt</strong> <code>integer</code> <br> - <strong>category_name</strong> <code>string</code> <br> - <strong>rules</strong> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>location</strong> <br> <code>object</code></td>
-<td>Object with following fields: <br> - <strong>country</strong> <code>object</code>: {<strong>id</strong> <code>integer</code>, <strong>name</strong> <code>string</code>} <br> - <strong>city</strong> <code>object</code>: {<strong>id</strong> <code>integer</code>, <strong>name</strong> <code>string</code>} <br> - <strong>region</strong> <code>object</code>: {<strong>id</strong> <code>integer</code>, <strong>name</strong> <code>string</code>}</td>
-</tr>
-</tbody>
-</table>
-<h3 id="event">Event</h3>
-<p>Object describes an event and contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-<th><strong>description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>thread_id</strong> <br> <code>string</code></td>
-<td>Comment thread ID in the following format: <br> <code>&lt;User's checksum&gt;&lt;ID&gt;</code>.</td>
-</tr>
-<tr>
-<td><strong>authors</strong> <br> <code>array</code></td>
-<td>Information about authors; see <code>User</code>.</td>
-</tr>
-<tr>
-<td><strong>type_name</strong> <br> <code>string</code></td>
-<td>Event type name.</td>
-</tr>
-<tr>
-<td><strong>click_url</strong> <br> <code>string</code> <br> Returns only if current <br> event is likeable.</td>
-<td>Event URL.</td>
-</tr>
-<tr>
-<td><strong>likes_count</strong> <br> <code>integer</code> <br> Returns only if current <br> event is likeable.</td>
-<td>Number of "likes".</td>
-</tr>
-<tr>
-<td><strong>attachments</strong> <br> <code>array</code></td>
-<td>Information about attachments to the event <br> (link, image, video, audio, user, ...) if any; <br> see <code>Attachments</code>.</td>
-</tr>
-<tr>
-<td><strong>time</strong> <br> <code>integer</code></td>
-<td>Date (in Unixtime) of the event.</td>
-</tr>
-<tr>
-<td><strong>huid</strong> <br> <code>string</code></td>
-<td>Event ID in the following format: <br> <code>&lt;User's checksum&gt;&lt;Event ID&gt;</code>.</td>
-</tr>
-<tr>
-<td><strong>generator</strong> <br> <code>object</code></td>
-<td>Object with the following fields: <br> - <strong>icon</strong> <code>string</code> - URL of app icon. <br> - <strong>url</strong> <code>string</code> - App url. <br> - <strong>app_id</strong> <code>integer</code> - App ID. <br> - <strong>type</strong> <code>string</code> - App type. <br> - <strong>title</strong> <code>string</code> - App title.</td>
-</tr>
-<tr>
-<td><strong>user_text</strong> <br> <code>string</code></td>
-<td>User text.</td>
-</tr>
-<tr>
-<td><strong>is_liked_by_me</strong> <br> <code>integer, [0,1]</code></td>
-<td>Shows if current user has liked the event.</td>
-</tr>
-<tr>
-<td><strong>subtype</strong> <br> <code>string</code></td>
-<td>"event"</td>
-</tr>
-<tr>
-<td><strong>is_commentable</strong> <br> <code>integer, [0,1]</code></td>
-<td>Shows if the event is commentable.</td>
-</tr>
-<tr>
-<td><strong>type</strong> <br> <code>string</code></td>
-<td>Event type; see <code>Event types</code>.</td>
-</tr>
-<tr>
-<td><strong>is_likeable</strong> <br> <code>integer, [0,1]</code></td>
-<td>Shows if the event is likeable.</td>
-</tr>
-<tr>
-<td><strong>id</strong> <br> <code>string</code></td>
-<td>Event ID.</td>
-</tr>
-<tr>
-<td><strong>text_media</strong> <br> <code>array</code> <br> Returns only if event's <br> type name is <em>micropost</em>.</td>
-<td>Information about text; see <code>Attachments</code>.</td>
-</tr>
-<tr>
-<td><strong>comments_count</strong> <br> <code>integer</code> <br> Returns only if current <br> event is commentable.</td>
-<td>Number of comments.</td>
-</tr>
-<tr>
-<td><strong>action_links</strong> <br> <code>array</code></td>
-<td>Each object contains following fields: <br> - <strong>text</strong> <code>string</code> <br> - <strong>href</strong> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="event-types">Event types</h4>
-<ul>
-<li>1-1 Photo</li>
-<li>1-2 Video</li>
-<li>1-3 Photo mark</li>
-<li>1-4 Video mark</li>
-<li>1-6 TYPE_PHOTO_WAS_SELECTED</li>
-<li>1-7 Music</li>
-<li>1-8 Photo comment</li>
-<li>1-9 TYPE_PHOTO_SUBSCRIPTION</li>
-<li>1-10 Video comment</li>
-<li>1-11 TYPE_PHOTO_WAS_MODERATED</li>
-<li>1-12 TYPE_VIDEO_WAS_MODERATED</li>
-<li>1-13 TYPE_VIDEO_TRANSLATION</li>
-<li>1-14 Private photo comment</li>
-<li>1-15 Private video comment</li>
-<li>1-16 Music comment</li>
-<li>1-17 TYPE_PHOTO_NEW_COMMENT</li>
-<li>1-18 TYPE_VIDEO_NEW_COMMENT</li>
-<li>3-1 Blog post</li>
-<li>3-2 Blog post comment</li>
-<li>3-3 Join community</li>
-<li>3-4 Community</li>
-<li>3-5 TYPE_USER_COMMUNITY_LEAVE</li>
-<li>3-6 TYPE_BLOG_COMMUNITY_POST</li>
-<li>3-7 TYPE_USER_GUESTBOOK</li>
-<li>3-8 TYPE_BLOG_CHALLENGE_ACCEPT</li>
-<li>3-9 TYPE_BLOG_CHALLENGE_THROW</li>
-<li>
-<ul>
-<li>3-10 TYPE_BLOG_SUBSCRIPTION</li>
-</ul>
-</li>
-<li>3-12 Blog post mark</li>
-<li>3-13 Community post mark</li>
-<li>3-23 Post in micro blog</li>
-<li>3-25 Private post in micro blog</li>
-<li>4-1 TYPE_QUESTION</li>
-<li>4-2 TYPE_QUESTION_ANSWER</li>
-<li>4-6 TYPE_QUESTION_ANSWER_PRIVATE</li>
-<li>5-1 TYPE_USER_FRIEND</li>
-<li>5-2 TYPE_USER_ANKETA</li>
-<li>5-4 TYPE_USER_CLASSMATES</li>
-<li>5-5 TYPE_USER_CAREER</li>
-<li>5-7 TYPE_USER_AVATAR</li>
-<li>5-9 TYPE_USER_PARTNER</li>
-<li>5-10 TYPE_GIFT_SENT</li>
-<li>5-11 TYPE_GIFT_RECEIVED</li>
-<li>5-12 TYPE_USER_MILITARY</li>
-<li>5-13 TYPE_USER_PARTNER_APPROVED</li>
-<li>5-15 TYPE_USER_ITEM</li>
-<li>5-16 App install</li>
-<li>5-17 App event</li>
-<li>5-18 Community post</li>
-<li>5-19 Post in community guestbook</li>
-<li>5-20 Join community</li>
-<li>5-21 Community video</li>
-<li>5-22 Community photo</li>
-<li>5-24 App event</li>
-<li>5-24 TYPE_APP_INFO</li>
-<li>5-26 Link share</li>
-<li>5-27 Event like</li>
-<li>5-29 Video share</li>
-<li>5-30 Comment to link share</li>
-<li>5-31 Comment to video share</li>
-<li>5-32 Micropost comment</li>
-</ul>
-<h3 id="like">Like</h3>
-<p>Object wraps an event that a user liked and contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-<th><strong>description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>time</strong> <br> <code>integer</code></td>
-<td>Date (in Unixtime) of the "like".</td>
-</tr>
-<tr>
-<td><strong>author</strong> <br> <code>object</code></td>
-<td>Information about the user; see <code>User</code>.</td>
-</tr>
-<tr>
-<td><strong>huid</strong> <br> <code>string</code></td>
-<td>Like ID in the following format: <br> <code>&lt;User's checksum&gt;&lt;Like ID&gt;</code>.</td>
-</tr>
-<tr>
-<td><strong>subevent</strong> <br> <code>object</code></td>
-<td>Information about the event; see <code>Event</code>.</td>
-</tr>
-<tr>
-<td><strong>subtype</strong> <br> <code>string</code></td>
-<td>"like".</td>
-</tr>
-<tr>
-<td><strong>is_commentable</strong> <br> <code>integer, [0,1]</code></td>
-<td>0.</td>
-</tr>
-<tr>
-<td><strong>id</strong> <br> <code>string</code></td>
-<td>Like ID.</td>
-</tr>
-<tr>
-<td><strong>is_likeable</strong> <br> <code>integer, [0,1]</code></td>
-<td>0.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="comment">Comment</h3>
-<p>Object wraps an event that a user commented and contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-<th><strong>description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>time</strong> <br> <code>integer</code></td>
-<td>Date (in Unixtime) of the comment.</td>
-</tr>
-<tr>
-<td><strong>huid</strong> <br> <code>string</code></td>
-<td>Comment ID in the following format: <br> <code>&lt;User's checksum&gt;&lt;Comment ID&gt;</code>.</td>
-</tr>
-<tr>
-<td><strong>subevent</strong> <br> <code>object</code></td>
-<td>Information about the event; see <code>Event</code>.</td>
-</tr>
-<tr>
-<td><strong>subtype</strong> <br> <code>string</code></td>
-<td>"comment".</td>
-</tr>
-<tr>
-<td><strong>comment</strong> <br> <code>object</code></td>
-<td>Object with following fields: <br> - <strong>text</strong> <code>string</code> - Text. <br> - <strong>time</strong> <code>integer</code> - Date (in Unixtime) of the comment. <br> - <strong>is_deleted</strong> <code>integer [0,1]</code> - Shows if the comment deleted. <br> - <strong>id</strong> <code>string</code> - Comment ID. <br> - <strong>author</strong> <code>object</code> - Information about the user; see <code>User</code>. <br> - <strong>text_media</strong> <code>object</code> - Object: {<strong>object</strong> <code>string</code> and <strong>content</strong> <code>string</code>}.</td>
-</tr>
-<tr>
-<td><strong>is_commentable</strong> <br> <code>integer, [0,1]</code></td>
-<td>0.</td>
-</tr>
-<tr>
-<td><strong>id</strong> <br> <code>string</code></td>
-<td>Comment ID.</td>
-</tr>
-<tr>
-<td><strong>is_likeable</strong> <br> <code>integer, [0,1]</code></td>
-<td>0.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="attachments">Attachments</h3>
-<p>Information about event's media attachments is returned
-in field <strong>attachments</strong> and contains an <code>array</code> of objects.
-Each object contains field <strong>object</strong> with type name that
-defines all other fields.</p>
-<h4 id="text">text</h4>
-<p>contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>object</strong> <br> <code>string, ["text"]</code></td>
-</tr>
-<tr>
-<td><strong>content</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="tag">tag</h4>
-<p>contains one additional field <strong>content</strong> with an object with following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>is_blacklist</strong> <br> <code>integer, [0,1]</code></td>
-</tr>
-<tr>
-<td><strong>tag</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="link">link</h4>
-<p>contains one additional field content with an object with following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>type-id</strong> <br> <code>string, ["text"]</code></td>
-</tr>
-<tr>
-<td><strong>contents</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<p>or contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>object</strong> <br> <code>string, ["link"]</code></td>
-</tr>
-<tr>
-<td><strong>text</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>url</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="avatar">avatar</h4>
-<p>contains one additional field <strong>new</strong> with an object with following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>thread_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>width</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>click_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>album_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>height</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>desc</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src_hires</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>owner_id</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="image">image</h4>
-<p>contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>likes_count</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>thread_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>width</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>object</strong> <br> <code>string, ["image"]</code></td>
-</tr>
-<tr>
-<td><strong>click_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>album_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>resized_src</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>height</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src_filed</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src_hires</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>owner_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>comments_count</strong> <br> <code>integer</code></td>
-</tr>
-</tbody>
-</table>
-<p>All fields but <strong>object</strong> and <strong>src</strong> may not be returned.</p>
-<h4 id="music">music</h4>
-<p>contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>is_add</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>click_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>object</strong> <br> <code>string, ["music"]</code></td>
-</tr>
-<tr>
-<td><strong>name</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>author</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>duration</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>file_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>uploader</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>mid</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="video">video</h4>
-<p>contains following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>width</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>object</strong> <br> <code>string, ["video"]</code></td>
-</tr>
-<tr>
-<td><strong>album_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>view_count</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>desc</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>comments_count</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>likes_count</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>thread_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>image_filed</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>click_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>duration</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>height</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>is_liked_by_me</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>external_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>owner_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>title</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="app">app</h4>
-<p>contains one additional field <strong>content</strong> with an object with following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>PublishStatus</strong> <br> <code>object</code> <br> Object with following fields: <br> - <strong>My</strong> <code>string</code> <br> - <strong>Mobile</strong> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>ID</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>InstallationsSpaced</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>ShortName</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>Genre</strong> <br> <code>array</code> <br> Each object contains following fields: <br> - <strong>name</strong> <code>string</code> <br> - <strong>id</strong> <code>string</code> <br> - <strong>admin_genre</strong> <code>integer, [0,1]</code></td>
-</tr>
-<tr>
-<td><strong>Votes</strong> <br> <code>object</code> <br> Object with following fields: <br> - <strong>VoteSum</strong> <code>string</code> <br> - <strong>VotesCount</strong> <code>string</code> <br> - <strong>VotesStarsWidth</strong> <code>string</code> <br> - <strong>Votes2IntRounded</strong> <code>string</code> <br> - <strong>Votes2DigitRounded</strong> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>Installations</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>ShortDescription</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>Name</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>Description</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>Pictures</strong> <br> <code>object</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="group">group</h4>
-<p>contains one additional field <strong>content</strong> with an object; see <code>User</code>.</p>
-<h4 id="gift">gift</h4>
-<p>contains one additional field <strong>content</strong> with an object with following fields:</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>is_private</strong> <br> <code>integer, [0,1]</code></td>
-</tr>
-<tr>
-<td><strong>click_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>is_anonymous</strong> <br> <code>integer, [0,1]</code></td>
-</tr>
-<tr>
-<td><strong>time</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>is_read</strong> <br> <code>integer, [0,1]</code></td>
-</tr>
-<tr>
-<td><strong>to</strong> <br> <code>object</code> <br> see <code>User</code>.</td>
-</tr>
-<tr>
-<td><strong>gift</strong> <br> <code>object</code></td>
-</tr>
-<tr>
-<td><strong>from</strong> <br> <code>object</code> <br> see <code>User</code>.</td>
-</tr>
-<tr>
-<td><strong>text</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>rus_time</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>long_id</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h3 id="other">Other</h3>
-<p>Objects that are not classified.</p>
-<h4 id="cover">Cover</h4>
-<p>Object contains information about profile's cover.</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>cover_position</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>width</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>size</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>aid</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>pid</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>thread_id</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>owner</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>target_album</strong> <br> <code>object</code> <br> Information about target album; <br> see <code>Target Album</code>.</td>
-</tr>
-<tr>
-<td><strong>click_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>height</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>cover_width</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>created</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>comment</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>src_small</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>cover_height</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>title</strong> <br> <code>string</code></td>
-</tr>
-</tbody>
-</table>
-<h4 id="target-album">Target Album</h4>
-<p>Object contains information about cover's target album.</p>
-<table>
-<thead>
-<tr>
-<th><strong>field</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>link</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>owner</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>sort_order</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>sort_by</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>description</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>privacy_desc</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>size</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>aid</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>created</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>cover_pid</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>cover_url</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>is_commentable</strong> <br> <code>integer, [0,1]</code></td>
-</tr>
-<tr>
-<td><strong>title</strong> <br> <code>string</code></td>
-</tr>
-<tr>
-<td><strong>updated</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>privacy</strong> <br> <code>integer</code></td>
-</tr>
-<tr>
-<td><strong>can_read_comment</strong> <br> <code>integer, [0,1]</code></td>
-</tr>
-</tbody>
-</table>
 
 
 
 
-              
-            </article>
-            
-          </div>
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../session/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Session" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Session
-            </div>
-          </div>
-        </a>
-      
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1693,10 +498,10 @@ defines all other fields.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.9c69f0bc.min.js"></script>
+      <script src="../assets/javascripts/bundle.dff1b7c8.min.js"></script>
       
     
   </body>
